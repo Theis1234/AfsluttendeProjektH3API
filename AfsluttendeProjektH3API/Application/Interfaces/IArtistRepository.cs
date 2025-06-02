@@ -1,4 +1,5 @@
 ﻿using AfsluttendeProjektH3API.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AfsluttendeProjektH3API.Application.Interfaces
 {
@@ -9,5 +10,6 @@ namespace AfsluttendeProjektH3API.Application.Interfaces
 		Task<IEnumerable<Artist>> GetAllAsync();
 		Task<Artist?> GetByIdAsync(int id);
 		Task UpdateAsync(Artist artist);
+		bool ArtistExists(int id);
 	}
 }

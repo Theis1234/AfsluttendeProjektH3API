@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AfsluttendeProjektH3API.Domain.Entities;
 using AfsluttendeProjektH3API.Infrastructure;
+using AfsluttendeProjektH3API.Application.Services;
 
 namespace AfsluttendeProjektH3API.Presentation.Controllers
 {
@@ -14,26 +15,27 @@ namespace AfsluttendeProjektH3API.Presentation.Controllers
     [ApiController]
     public class ArtistsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ArtistService _service;
 
-        public ArtistsController(AppDbContext context)
+        public ArtistsController(ArtistService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Artists
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Artist>>> GetArtists()
         {
-            return await _context.Artists.ToListAsync();
+            var artists =  await _service.GetAllAsync();
+            return Ok(artists);
         }
 
         // GET: api/Artists/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Artist>> GetArtist(int id)
         {
-            var artist = await _context.Artists.FindAsync(id);
-
+            var artist = await _service.GetAsync(id);
+             
             if (artist == null)
             {
                 return NotFound();
@@ -52,24 +54,7 @@ namespace AfsluttendeProjektH3API.Presentation.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(artist).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ArtistExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _service.UpdateAsync(artist);
             return NoContent();
         }
 
@@ -78,31 +63,17 @@ namespace AfsluttendeProjektH3API.Presentation.Controllers
         [HttpPost]
         public async Task<ActionResult<Artist>> PostArtist(Artist artist)
         {
-            _context.Artists.Add(artist);
-            await _context.SaveChangesAsync();
+            await _service.AddAsync(artist);
 
-            return CreatedAtAction("GetArtist", new { id = artist.Id }, artist);
+            return CreatedAtAction(nameof(GetArtist), new { id = artist.Id }, artist);
         }
 
         // DELETE: api/Artists/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArtist(int id)
         {
-            var artist = await _context.Artists.FindAsync(id);
-            if (artist == null)
-            {
-                return NotFound();
-            }
-
-            _context.Artists.Remove(artist);
-            await _context.SaveChangesAsync();
-
+            await _service.DeleteAsync(id);
             return NoContent();
-        }
-
-        private bool ArtistExists(int id)
-        {
-            return _context.Artists.Any(e => e.Id == id);
         }
     }
 }

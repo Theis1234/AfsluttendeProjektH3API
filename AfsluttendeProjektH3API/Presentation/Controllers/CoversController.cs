@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AfsluttendeProjektH3API.Domain.Entities;
 using AfsluttendeProjektH3API.Infrastructure;
+using AfsluttendeProjektH3API.Application.Services;
 
 namespace AfsluttendeProjektH3API.Presentation.Controllers
 {
@@ -14,95 +15,65 @@ namespace AfsluttendeProjektH3API.Presentation.Controllers
     [ApiController]
     public class CoversController : ControllerBase
     {
-        private readonly AppDbContext _context;
+		private readonly CoverService _service;
 
-        public CoversController(AppDbContext context)
-        {
-            _context = context;
-        }
+		public CoversController(CoverService service)
+		{
+			_service = service;
+		}
 
-        // GET: api/Covers
-        [HttpGet]
+		// GET: api/Covers
+		[HttpGet]
         public async Task<ActionResult<IEnumerable<Cover>>> GetCovers()
         {
-            return await _context.Covers.ToListAsync();
-        }
+			var covers = await _service.GetAllAsync();
+			return Ok(covers);
+		}
 
         // GET: api/Covers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Cover>> GetCover(int id)
         {
-            var cover = await _context.Covers.FindAsync(id);
+			var cover = await _service.GetAsync(id);
 
-            if (cover == null)
-            {
-                return NotFound();
-            }
+			if (cover == null)
+			{
+				return NotFound();
+			}
 
-            return cover;
-        }
+			return cover;
+		}
 
         // PUT: api/Covers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCover(int id, Cover cover)
         {
-            if (id != cover.Id)
-            {
-                return BadRequest();
-            }
+			if (id != cover.Id)
+			{
+				return BadRequest();
+			}
 
-            _context.Entry(cover).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CoverExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+			await _service.UpdateAsync(cover);
+			return NoContent();
+		}
 
         // POST: api/Covers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Cover>> PostCover(Cover cover)
         {
-            _context.Covers.Add(cover);
-            await _context.SaveChangesAsync();
+			await _service.AddAsync(cover);
 
-            return CreatedAtAction("GetCover", new { id = cover.Id }, cover);
-        }
+			return CreatedAtAction(nameof(GetCover), new { id = cover.Id }, cover);
+		}
 
         // DELETE: api/Covers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCover(int id)
         {
-            var cover = await _context.Covers.FindAsync(id);
-            if (cover == null)
-            {
-                return NotFound();
-            }
-
-            _context.Covers.Remove(cover);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool CoverExists(int id)
-        {
-            return _context.Covers.Any(e => e.Id == id);
-        }
+			await _service.DeleteAsync(id);
+			return NoContent();
+		}
     }
 }
