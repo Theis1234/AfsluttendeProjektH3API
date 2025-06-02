@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AfsluttendeProjektH3API;
 using AfsluttendeProjektH3API.Domain.Entities;
+using AfsluttendeProjektH3API.Infrastructure;
 
-namespace AfsluttendeProjektH3API.Controllers
+namespace AfsluttendeProjektH3API.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -2,7 +2,7 @@
 
 namespace AfsluttendeProjektH3API.Application.DTOs
 {
-	public class ArtistDTO
+	public class CreateArtistDTO
 	{
 		public string? FirstName { get; set; }
 		public string? LastName { get; set; }

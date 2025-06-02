@@ -1,6 +1,6 @@
 ﻿namespace AfsluttendeProjektH3API.Application.DTOs
 {
-	public class AuthorDTO
+	public class CreateAuthorDTO
 	{
 		public string? FirstName { get; set; }
 		public string? LastName { get; set; }

@@ -1,0 +1,40 @@
+﻿using AfsluttendeProjektH3API.Application.Interfaces;
+using AfsluttendeProjektH3API.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace AfsluttendeProjektH3API.Infrastructure.Repositories
+{
+	public class CoverRepository : ICoverRepository
+	{
+		private readonly AppDbContext _context;
+		public CoverRepository(AppDbContext context) => _context = context;
+
+		public async Task<Cover?> GetByIdAsync(int id) =>
+			await _context.Covers.FirstOrDefaultAsync(p => p.Id == id);
+
+		public async Task<IEnumerable<Cover>> GetAllAsync() =>
+			await _context.Covers.ToListAsync();
+
+		public async Task AddAsync(Cover cover)
+		{
+			_context.Add(cover);
+			await _context.SaveChangesAsync();
+		}
+
+		public async Task UpdateAsync(Cover cover)
+		{
+			_context.Covers.Update(cover);
+			await _context.SaveChangesAsync();
+		}
+
+		public async Task DeleteAsync(int id)
+		{
+			var entity = await _context.Covers.FindAsync(id);
+			if (entity != null)
+			{
+				_context.Covers.Remove(entity);
+				await _context.SaveChangesAsync();
+			}
+		}
+	}
+}

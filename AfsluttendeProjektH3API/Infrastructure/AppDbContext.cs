@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
-namespace AfsluttendeProjektH3API
+namespace AfsluttendeProjektH3API.Infrastructure
 {
 	public class AppDbContext : DbContext
 	{

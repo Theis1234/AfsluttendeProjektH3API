@@ -5,54 +5,54 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AfsluttendeProjektH3API;
 using AfsluttendeProjektH3API.Domain.Entities;
+using AfsluttendeProjektH3API.Infrastructure;
 
-namespace AfsluttendeProjektH3API.Controllers
+namespace AfsluttendeProjektH3API.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CoversController : ControllerBase
+    public class ArtistsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public CoversController(AppDbContext context)
+        public ArtistsController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Covers
+        // GET: api/Artists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cover>>> GetCovers()
+        public async Task<ActionResult<IEnumerable<Artist>>> GetArtists()
         {
-            return await _context.Covers.ToListAsync();
+            return await _context.Artists.ToListAsync();
         }
 
-        // GET: api/Covers/5
+        // GET: api/Artists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cover>> GetCover(int id)
+        public async Task<ActionResult<Artist>> GetArtist(int id)
         {
-            var cover = await _context.Covers.FindAsync(id);
+            var artist = await _context.Artists.FindAsync(id);
 
-            if (cover == null)
+            if (artist == null)
             {
                 return NotFound();
             }
 
-            return cover;
+            return artist;
         }
 
-        // PUT: api/Covers/5
+        // PUT: api/Artists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCover(int id, Cover cover)
+        public async Task<IActionResult> PutArtist(int id, Artist artist)
         {
-            if (id != cover.Id)
+            if (id != artist.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(cover).State = EntityState.Modified;
+            _context.Entry(artist).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace AfsluttendeProjektH3API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CoverExists(id))
+                if (!ArtistExists(id))
                 {
                     return NotFound();
                 }
@@ -73,36 +73,36 @@ namespace AfsluttendeProjektH3API.Controllers
             return NoContent();
         }
 
-        // POST: api/Covers
+        // POST: api/Artists
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Cover>> PostCover(Cover cover)
+        public async Task<ActionResult<Artist>> PostArtist(Artist artist)
         {
-            _context.Covers.Add(cover);
+            _context.Artists.Add(artist);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCover", new { id = cover.Id }, cover);
+            return CreatedAtAction("GetArtist", new { id = artist.Id }, artist);
         }
 
-        // DELETE: api/Covers/5
+        // DELETE: api/Artists/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCover(int id)
+        public async Task<IActionResult> DeleteArtist(int id)
         {
-            var cover = await _context.Covers.FindAsync(id);
-            if (cover == null)
+            var artist = await _context.Artists.FindAsync(id);
+            if (artist == null)
             {
                 return NotFound();
             }
 
-            _context.Covers.Remove(cover);
+            _context.Artists.Remove(artist);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool CoverExists(int id)
+        private bool ArtistExists(int id)
         {
-            return _context.Covers.Any(e => e.Id == id);
+            return _context.Artists.Any(e => e.Id == id);
         }
     }
 }

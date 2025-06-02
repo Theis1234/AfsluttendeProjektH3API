@@ -5,54 +5,54 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AfsluttendeProjektH3API;
 using AfsluttendeProjektH3API.Domain.Entities;
+using AfsluttendeProjektH3API.Infrastructure;
 
-namespace AfsluttendeProjektH3API.Controllers
+namespace AfsluttendeProjektH3API.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ArtistsController : ControllerBase
+    public class BooksController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public ArtistsController(AppDbContext context)
+        public BooksController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Artists
+        // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Artist>>> GetArtists()
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            return await _context.Artists.ToListAsync();
+            return await _context.Books.ToListAsync();
         }
 
-        // GET: api/Artists/5
+        // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Artist>> GetArtist(int id)
+        public async Task<ActionResult<Book>> GetBook(int id)
         {
-            var artist = await _context.Artists.FindAsync(id);
+            var book = await _context.Books.FindAsync(id);
 
-            if (artist == null)
+            if (book == null)
             {
                 return NotFound();
             }
 
-            return artist;
+            return book;
         }
 
-        // PUT: api/Artists/5
+        // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutArtist(int id, Artist artist)
+        public async Task<IActionResult> PutBook(int id, Book book)
         {
-            if (id != artist.Id)
+            if (id != book.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(artist).State = EntityState.Modified;
+            _context.Entry(book).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace AfsluttendeProjektH3API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ArtistExists(id))
+                if (!BookExists(id))
                 {
                     return NotFound();
                 }
@@ -73,36 +73,36 @@ namespace AfsluttendeProjektH3API.Controllers
             return NoContent();
         }
 
-        // POST: api/Artists
+        // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Artist>> PostArtist(Artist artist)
+        public async Task<ActionResult<Book>> PostBook(Book book)
         {
-            _context.Artists.Add(artist);
+            _context.Books.Add(book);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetArtist", new { id = artist.Id }, artist);
+            return CreatedAtAction("GetBook", new { id = book.Id }, book);
         }
 
-        // DELETE: api/Artists/5
+        // DELETE: api/Books/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteArtist(int id)
+        public async Task<IActionResult> DeleteBook(int id)
         {
-            var artist = await _context.Artists.FindAsync(id);
-            if (artist == null)
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
             {
                 return NotFound();
             }
 
-            _context.Artists.Remove(artist);
+            _context.Books.Remove(book);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ArtistExists(int id)
+        private bool BookExists(int id)
         {
-            return _context.Artists.Any(e => e.Id == id);
+            return _context.Books.Any(e => e.Id == id);
         }
     }
 }

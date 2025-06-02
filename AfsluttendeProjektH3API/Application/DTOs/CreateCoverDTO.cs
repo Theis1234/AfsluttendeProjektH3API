@@ -2,7 +2,7 @@
 
 namespace AfsluttendeProjektH3API.Application.DTOs
 {
-	public class CoverDTO
+	public class CreateCoverDTO
 	{
 		public required string Title { get; set; }
 		public bool DigitalOnly { get; set; }
