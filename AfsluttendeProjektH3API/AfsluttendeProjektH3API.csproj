@@ -21,4 +21,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AfsluttendeProjektH3API.Application\AfsluttendeProjektH3API.Application.csproj" />
+    <ProjectReference Include="..\AfsluttendeProjektH3API.Infrastructure\AfsluttendeProjektH3API.Infrastructure.csproj" />
+    <ProjectReference Include="..\Domain\AfsluttendeProjektH3API.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

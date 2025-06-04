@@ -9,68 +9,68 @@ using AfsluttendeProjektH3API.Domain.Entities;
 using AfsluttendeProjektH3API.Infrastructure;
 using AfsluttendeProjektH3API.Application.Services;
 
-namespace AfsluttendeProjektH3API.Presentation.Controllers
+namespace AfsluttendeProjektH3API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksController : ControllerBase
+    public class CoversController : ControllerBase
     {
-		private readonly BookService _service;
+		private readonly CoverService _service;
 
-		public BooksController(BookService service)
+		public CoversController(CoverService service)
 		{
 			_service = service;
 		}
 
-		// GET: api/Books
+		// GET: api/Covers
 		[HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<Cover>>> GetCovers()
         {
-			var books = await _service.GetAllAsync();
-			return Ok(books);
+			var covers = await _service.GetAllAsync();
+			return Ok(covers);
 		}
 
-        // GET: api/Books/5
+        // GET: api/Covers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBook(int id)
+        public async Task<ActionResult<Cover>> GetCover(int id)
         {
-			var book = await _service.GetAsync(id);
+			var cover = await _service.GetAsync(id);
 
-			if (book == null)
+			if (cover == null)
 			{
 				return NotFound();
 			}
 
-			return book;
+			return cover;
 		}
 
-        // PUT: api/Books/5
+        // PUT: api/Covers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBook(int id, Book book)
+        public async Task<IActionResult> PutCover(int id, Cover cover)
         {
-			if (id != book.Id)
+			if (id != cover.Id)
 			{
 				return BadRequest();
 			}
 
-			await _service.UpdateAsync(book);
+			await _service.UpdateAsync(cover);
 			return NoContent();
 		}
 
-        // POST: api/Books
+        // POST: api/Covers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Book>> PostBook(Book book)
+        public async Task<ActionResult<Cover>> PostCover(Cover cover)
         {
-			await _service.AddAsync(book);
+			await _service.AddAsync(cover);
 
-			return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
+			return CreatedAtAction(nameof(GetCover), new { id = cover.Id }, cover);
 		}
 
-        // DELETE: api/Books/5
+        // DELETE: api/Covers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBook(int id)
+        public async Task<IActionResult> DeleteCover(int id)
         {
 			await _service.DeleteAsync(id);
 			return NoContent();

@@ -2,8 +2,8 @@
 {
 	public class ArtistCover
 	{
-		public required Book Book { get; set; }
-		public int BookId { get; set; }
+		public required Artist Artist { get; set; }
+		public int ArtistId { get; set; }
 		public required Cover Cover { get; set; }
 		public int CoverId { get; set; }
 	}

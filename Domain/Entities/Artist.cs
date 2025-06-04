@@ -7,6 +7,6 @@
 		public string? LastName { get; set; }
 		public string? Nationality { get; set; }
 		public DateOnly DateOfBirth { get; set; }
-		public required List<Cover> Covers { get; set; } = new List<Cover>();
+		public required List<ArtistCover> ArtistCovers { get; set; } = new List<ArtistCover>();
 	}
 }

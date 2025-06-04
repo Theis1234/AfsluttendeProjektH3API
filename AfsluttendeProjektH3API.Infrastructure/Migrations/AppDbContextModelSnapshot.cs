@@ -34,17 +34,35 @@ namespace AfsluttendeProjektH3API.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Nationality")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Artists");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.ArtistCover", b =>
+                {
+                    b.Property<int>("ArtistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoverId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArtistId", "CoverId");
+
+                    b.HasIndex("CoverId");
+
+                    b.ToTable("ArtistCover");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Author", b =>
@@ -59,16 +77,19 @@ namespace AfsluttendeProjektH3API.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastPublishedBook")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nationality")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("NumberOfBooksPublished")
                         .HasColumnType("int");
@@ -93,16 +114,18 @@ namespace AfsluttendeProjektH3API.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("Genre")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("NumberOfPages")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("PublishedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("PublishedDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -127,7 +150,8 @@ namespace AfsluttendeProjektH3API.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -136,19 +160,23 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.ToTable("Covers");
                 });
 
-            modelBuilder.Entity("ArtistCover", b =>
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.ArtistCover", b =>
                 {
-                    b.Property<int>("ArtistsId")
-                        .HasColumnType("int");
+                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Artist", "Artist")
+                        .WithMany("ArtistCovers")
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("CoversId")
-                        .HasColumnType("int");
+                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Cover", "Cover")
+                        .WithMany("ArtistCover")
+                        .HasForeignKey("CoverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasKey("ArtistsId", "CoversId");
+                    b.Navigation("Artist");
 
-                    b.HasIndex("CoversId");
-
-                    b.ToTable("ArtistCover");
+                    b.Navigation("Cover");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Book", b =>
@@ -173,19 +201,14 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.Navigation("Book");
                 });
 
-            modelBuilder.Entity("ArtistCover", b =>
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Artist", b =>
                 {
-                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Artist", null)
-                        .WithMany()
-                        .HasForeignKey("ArtistsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("ArtistCovers");
+                });
 
-                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Cover", null)
-                        .WithMany()
-                        .HasForeignKey("CoversId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>
+                {
+                    b.Navigation("ArtistCover");
                 });
 #pragma warning restore 612, 618
         }

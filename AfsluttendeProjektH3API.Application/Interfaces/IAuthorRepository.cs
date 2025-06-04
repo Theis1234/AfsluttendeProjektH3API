@@ -9,5 +9,6 @@ namespace AfsluttendeProjektH3API.Application.Interfaces
 		Task<IEnumerable<Author>> GetAllAsync();
 		Task<Author?> GetByIdAsync(int id);
 		Task UpdateAsync(Author author);
+		bool AuthorExists(int id);
 	}
 }

@@ -9,5 +9,6 @@ namespace AfsluttendeProjektH3API.Application.Interfaces
 		Task<IEnumerable<Cover>> GetAllAsync();
 		Task<Cover?> GetByIdAsync(int id);
 		Task UpdateAsync(Cover cover);
+		bool CoverExists(int id);
 	}
 }

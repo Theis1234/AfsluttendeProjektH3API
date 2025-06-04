@@ -9,7 +9,7 @@ using AfsluttendeProjektH3API.Domain.Entities;
 using AfsluttendeProjektH3API.Infrastructure;
 using AfsluttendeProjektH3API.Application.Services;
 
-namespace AfsluttendeProjektH3API.Presentation.Controllers
+namespace AfsluttendeProjektH3API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

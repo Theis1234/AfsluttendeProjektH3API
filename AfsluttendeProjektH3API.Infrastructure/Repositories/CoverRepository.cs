@@ -36,5 +36,9 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 				await _context.SaveChangesAsync();
 			}
 		}
+		public bool CoverExists(int id)
+		{
+			return _context.Covers.Any(c => c.Id == id);
+		}
 	}
 }
