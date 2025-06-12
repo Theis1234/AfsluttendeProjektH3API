@@ -4,7 +4,10 @@ using AfsluttendeProjektH3API.Application.Interfaces;
 using AfsluttendeProjektH3API.Application.Services;
 using AfsluttendeProjektH3API.Infrastructure;
 using AfsluttendeProjektH3API.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace AfsluttendeProjektH3API
 {
@@ -23,9 +26,31 @@ namespace AfsluttendeProjektH3API
             builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidIssuer = builder.Configuration["JwtConfig:Issuer"],
+                    ValidAudience = builder.Configuration["JwtConfig:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Key"]!)),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true
+                };
+            });
+            builder.Services.AddAuthorization();
+
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAngularApp", 
+                options.AddPolicy("AllowAngularApp",
                     policy =>
                     {
                         policy.WithOrigins("http://localhost:4200")
@@ -33,18 +58,18 @@ namespace AfsluttendeProjektH3API
                               .AllowAnyMethod();
                     });
             });
-            builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-            builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
-            builder.Services.AddScoped<IBookRepository, BookRepository>();
-            builder.Services.AddScoped<ICoverRepository, CoverRepository>();
+
+			builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+			builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+			builder.Services.AddScoped<IBookRepository, BookRepository>();
+			builder.Services.AddScoped<ICoverRepository, CoverRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<AuthorService>();
             builder.Services.AddScoped<ArtistService>();
             builder.Services.AddScoped<BookService>();
             builder.Services.AddScoped<CoverService>();
 
             var app = builder.Build();
-
-            app.UseCors("AllowAngularApp");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

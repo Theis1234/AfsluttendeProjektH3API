@@ -12,12 +12,10 @@ namespace AfsluttendeProjektH3API.Infrastructure
 		public DbSet<Artist> Artists { get; set; }
 		public DbSet<Author> Authors { get; set; }
 		public DbSet<Cover> Covers { get; set; }
+		public DbSet<User> Users { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-
-			
-
 			modelBuilder.Entity<Artist>(a => 
 			{
 				a.HasKey(a => a.Id);
@@ -61,6 +59,13 @@ namespace AfsluttendeProjektH3API.Infrastructure
 			{
 				c.HasKey(e => e.Id);
 				c.Property(e => e.Title).HasMaxLength(50);
+			});
+
+			modelBuilder.Entity<User>(u =>
+			{
+				u.HasKey(e => e.Id);
+				u.Property(e => e.Username).HasMaxLength(20);
+				u.Property(e => e.PasswordHash).HasMaxLength(2000);
 			});
 
 
