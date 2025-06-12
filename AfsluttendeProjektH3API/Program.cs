@@ -78,7 +78,7 @@ namespace AfsluttendeProjektH3API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseCors("AllowAngularApp");
             app.UseAuthorization();
 
 
