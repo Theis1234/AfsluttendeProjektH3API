@@ -1,4 +1,5 @@
 ﻿using AfsluttendeProjektH3API.Application.DTOs;
+using AfsluttendeProjektH3API.Application.Interfaces;
 using AfsluttendeProjektH3API.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AfsluttendeProjektH3API.Controllers
 {
@@ -13,60 +15,45 @@ namespace AfsluttendeProjektH3API.Controllers
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
-		private readonly IConfiguration _config;
+		private readonly IAuthService _authService;
 		public static User user = new User();
 
-		public AuthController(IConfiguration config)
+		public AuthController(IAuthService authService)
 		{
-			_config = config;
+            _authService = authService;
 		}
 
 		[HttpPost("register")]
-		public ActionResult<User> Register(UserDTO userDTO)
+		public async Task<ActionResult<User>> Register(UserDTO userDTO)
 		{
-			var hashedPassword = new PasswordHasher<User>().HashPassword(user, userDTO.Password);
-
-			user.Username = userDTO.Username;
-			user.PasswordHash = hashedPassword;
+			var user = await _authService.RegisterUserAsync(userDTO);
+			if (user is null)
+			{
+				return BadRequest("Username already exists");
+			}
 
 			return Ok(user);
 		}
-		[HttpPost("login")]
-		public ActionResult<string> Login(UserDTO userDTO)
+		[HttpPost("refresh-token")]
+		public async Task<ActionResult<TokenReponseDTO>> RefreshToken(RefreshTokenRequestDTO refreshTokenDTO)
 		{
-			if(user.Username != userDTO.Username)
+			var result = await _authService.RefreshTokensAsync(refreshTokenDTO);
+			if(result is null || result.AccessToken is null || result.RefreshToken is null)
 			{
-				return BadRequest("User not found");
+				return Unauthorized("Invalid refresh token.");
 			}
-			if(new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, userDTO.Password) == PasswordVerificationResult.Failed)
-			{
-				return BadRequest("Wrong password");
-			}
-			string token = CreateToken(user);
-
-			return Ok(token);
+			return Ok(result);
 		}
 
-		private string CreateToken(User user)
+		[HttpPost("login")]
+		public async Task<ActionResult<TokenReponseDTO>> Login(UserDTO userDTO)
 		{
-			var claims = new List<Claim>
+			var response = await _authService.LoginAsync(userDTO);
+			if (response is null)
 			{
-				new Claim(ClaimTypes.Name, user.Username)
-			};
-
-			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("JwtConfig:Key")!));
-
-			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-
-			var tokenDescriptor = new JwtSecurityToken(
-				issuer: _config.GetValue<string>("JwtConfig:Issuer"), 
-				audience: _config.GetValue<string>("JwtConfig:Audience"),
-				claims: claims, 
-				expires: DateTime.UtcNow.AddMinutes(_config.GetValue<int>("JwtConfig:TokenValidityMins")), 
-				signingCredentials: creds
-			);
-
-			return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+				return BadRequest("Invalid username or password");
+			}
+			return Ok(response);
 		}
 
 	}

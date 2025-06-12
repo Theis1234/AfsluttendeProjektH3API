@@ -66,6 +66,7 @@ namespace AfsluttendeProjektH3API.Infrastructure
 				u.HasKey(e => e.Id);
 				u.Property(e => e.Username).HasMaxLength(20);
 				u.Property(e => e.PasswordHash).HasMaxLength(2000);
+				u.Property(e => e.Role).HasMaxLength(30);
 			});
 
 

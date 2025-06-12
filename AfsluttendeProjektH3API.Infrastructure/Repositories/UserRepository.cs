@@ -21,6 +21,13 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 		public async Task<IEnumerable<User>> GetAllAsync() =>
 			await _context.Users.ToListAsync();
 
+		public async Task GenerateAndSaveRefreshTokenAsync(User user, string refreshToken)
+		{
+			user.RefreshToken = refreshToken;
+			user.RefreshTokenExpirationTime = DateTime.UtcNow.AddDays(7);
+			await _context.SaveChangesAsync();
+        }
+
 		public async Task<User?> AddAsync(UserDTO userDTO)
 		{
 			if (await _context.Users.AnyAsync(p => p.Username == userDTO.Username))

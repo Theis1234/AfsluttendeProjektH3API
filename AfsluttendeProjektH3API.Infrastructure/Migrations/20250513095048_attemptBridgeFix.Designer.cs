@@ -26,170 +26,170 @@ namespace AfsluttendeProjektH3API.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Artist", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
+                b.Property<DateOnly>("DateOfBirth")
+                    .HasColumnType("date");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("FirstName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("LastName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nationality")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Nationality")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Artists");
-                });
+                b.ToTable("Artists");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Author", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
+                b.Property<DateOnly>("DateOfBirth")
+                    .HasColumnType("date");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("FirstName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("LastName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastPublishedBook")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("LastPublishedBook")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nationality")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Nationality")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NumberOfBooksPublished")
-                        .HasColumnType("int");
+                b.Property<int>("NumberOfBooksPublished")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Authors");
-                });
-
-            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Book", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("BasePrice")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Genre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumberOfPages")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PublishedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("DigitalOnly")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("Covers");
-                });
-
-            modelBuilder.Entity("ArtistCover", b =>
-                {
-                    b.Property<int>("ArtistsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CoversId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ArtistsId", "CoversId");
-
-                    b.HasIndex("CoversId");
-
-                    b.ToTable("ArtistCover");
-                });
+                b.ToTable("Authors");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Book", b =>
-                {
-                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Author", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    b.Navigation("Author");
-                });
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                b.Property<int>("AuthorId")
+                    .HasColumnType("int");
+
+                b.Property<double>("BasePrice")
+                    .HasColumnType("float");
+
+                b.Property<string>("Genre")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<int>("NumberOfPages")
+                    .HasColumnType("int");
+
+                b.Property<DateTime>("PublishedDate")
+                    .HasColumnType("datetime2");
+
+                b.Property<string>("Title")
+                    .HasColumnType("nvarchar(max)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("AuthorId");
+
+                b.ToTable("Books");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>
-                {
-                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    b.Navigation("Book");
-                });
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                b.Property<int>("BookId")
+                    .HasColumnType("int");
+
+                b.Property<bool>("DigitalOnly")
+                    .HasColumnType("bit");
+
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("BookId");
+
+                b.ToTable("Covers");
+            });
 
             modelBuilder.Entity("ArtistCover", b =>
-                {
-                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Artist", null)
-                        .WithMany()
-                        .HasForeignKey("ArtistsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.Property<int>("ArtistsId")
+                    .HasColumnType("int");
 
-                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Cover", null)
-                        .WithMany()
-                        .HasForeignKey("CoversId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                b.Property<int>("CoversId")
+                    .HasColumnType("int");
+
+                b.HasKey("ArtistsId", "CoversId");
+
+                b.HasIndex("CoversId");
+
+                b.ToTable("ArtistCover");
+            });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Book", b =>
+            {
+                b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Author", "Author")
+                    .WithMany()
+                    .HasForeignKey("AuthorId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Author");
+            });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>
+            {
+                b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Book", "Book")
+                    .WithMany()
+                    .HasForeignKey("BookId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Book");
+            });
+
+            modelBuilder.Entity("ArtistCover", b =>
+            {
+                b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Artist", null)
+                    .WithMany()
+                    .HasForeignKey("ArtistsId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Cover", null)
+                    .WithMany()
+                    .HasForeignKey("CoversId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 #pragma warning restore 612, 618
         }
     }

@@ -26,216 +26,216 @@ namespace AfsluttendeProjektH3API.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Artist", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
+                b.Property<DateOnly>("DateOfBirth")
+                    .HasColumnType("date");
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("FirstName")
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("LastName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("LastName")
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Nationality")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                b.Property<string>("Nationality")
+                    .HasMaxLength(30)
+                    .HasColumnType("nvarchar(30)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Artists");
-                });
+                b.ToTable("Artists");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.ArtistCover", b =>
-                {
-                    b.Property<int>("ArtistId")
-                        .HasColumnType("int");
+            {
+                b.Property<int>("ArtistId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("CoverId")
-                        .HasColumnType("int");
+                b.Property<int>("CoverId")
+                    .HasColumnType("int");
 
-                    b.HasKey("ArtistId", "CoverId");
+                b.HasKey("ArtistId", "CoverId");
 
-                    b.HasIndex("CoverId");
+                b.HasIndex("CoverId");
 
-                    b.ToTable("ArtistCover");
-                });
+                b.ToTable("ArtistCover");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Author", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
+                b.Property<DateOnly>("DateOfBirth")
+                    .HasColumnType("date");
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("FirstName")
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("LastName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("LastName")
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("LastPublishedBook")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("LastPublishedBook")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nationality")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                b.Property<string>("Nationality")
+                    .HasMaxLength(30)
+                    .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("NumberOfBooksPublished")
-                        .HasColumnType("int");
+                b.Property<int>("NumberOfBooksPublished")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Authors");
-                });
+                b.ToTable("Authors");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Book", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
+                b.Property<int>("AuthorId")
+                    .HasColumnType("int");
 
-                    b.Property<double>("BasePrice")
-                        .HasColumnType("float");
+                b.Property<double>("BasePrice")
+                    .HasColumnType("float");
 
-                    b.Property<string>("Genre")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                b.Property<string>("Genre")
+                    .HasMaxLength(30)
+                    .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("NumberOfPages")
-                        .HasColumnType("int");
+                b.Property<int>("NumberOfPages")
+                    .HasColumnType("int");
 
-                    b.Property<DateOnly>("PublishedDate")
-                        .HasColumnType("date");
+                b.Property<DateOnly>("PublishedDate")
+                    .HasColumnType("date");
 
-                    b.Property<string>("Title")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("Title")
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                b.HasIndex("AuthorId");
 
-                    b.ToTable("Books");
-                });
+                b.ToTable("Books");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
+                b.Property<int>("BookId")
+                    .HasColumnType("int");
 
-                    b.Property<bool>("DigitalOnly")
-                        .HasColumnType("bit");
+                b.Property<bool>("DigitalOnly")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("BookId");
+                b.HasIndex("BookId");
 
-                    b.ToTable("Covers");
-                });
+                b.ToTable("Covers");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                b.Property<string>("PasswordHash")
+                    .IsRequired()
+                    .HasMaxLength(2000)
+                    .HasColumnType("nvarchar(2000)");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                b.Property<string>("Username")
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Users");
-                });
+                b.ToTable("Users");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.ArtistCover", b =>
-                {
-                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Artist", "Artist")
-                        .WithMany("ArtistCovers")
-                        .HasForeignKey("ArtistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Artist", "Artist")
+                    .WithMany("ArtistCovers")
+                    .HasForeignKey("ArtistId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Cover", "Cover")
-                        .WithMany("ArtistCover")
-                        .HasForeignKey("CoverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Cover", "Cover")
+                    .WithMany("ArtistCover")
+                    .HasForeignKey("CoverId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Artist");
+                b.Navigation("Artist");
 
-                    b.Navigation("Cover");
-                });
+                b.Navigation("Cover");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Book", b =>
-                {
-                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Author", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Author", "Author")
+                    .WithMany()
+                    .HasForeignKey("AuthorId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Author");
-                });
+                b.Navigation("Author");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>
-                {
-                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Book", "Book")
+                    .WithMany()
+                    .HasForeignKey("BookId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Book");
-                });
+                b.Navigation("Book");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Artist", b =>
-                {
-                    b.Navigation("ArtistCovers");
-                });
+            {
+                b.Navigation("ArtistCovers");
+            });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>
-                {
-                    b.Navigation("ArtistCover");
-                });
+            {
+                b.Navigation("ArtistCover");
+            });
 #pragma warning restore 612, 618
         }
     }

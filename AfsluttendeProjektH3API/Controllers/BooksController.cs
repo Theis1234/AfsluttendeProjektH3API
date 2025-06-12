@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AfsluttendeProjektH3API.Domain.Entities;
 using AfsluttendeProjektH3API.Infrastructure;
 using AfsluttendeProjektH3API.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AfsluttendeProjektH3API.Controllers
 {
@@ -47,6 +48,7 @@ namespace AfsluttendeProjektH3API.Controllers
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutBook(int id, Book book)
         {
 			if (id != book.Id)
@@ -61,6 +63,7 @@ namespace AfsluttendeProjektH3API.Controllers
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Book>> PostBook(Book book)
         {
 			await _service.AddAsync(book);
@@ -70,6 +73,7 @@ namespace AfsluttendeProjektH3API.Controllers
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteBook(int id)
         {
 			await _service.DeleteAsync(id);

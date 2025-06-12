@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace AfsluttendeProjektH3API.Application.DTOs
 {
-	public class LoginRequest
+	public class TokenReponseDTO
 	{
-		public string? Username { get; set; }
-		public string? Password { get; set; }
+		public required string AccessToken { get; set; }
+
+		public required string RefreshToken { get; set; }
 	}
 }

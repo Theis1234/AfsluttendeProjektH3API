@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,30 +24,74 @@ namespace AfsluttendeProjektH3API.Application.Services
 			_userRepository = userRepository;
 			_config = config;
 		}
-		public async Task<string?> LoginAsync(UserDTO userDTO)
+		public async Task<TokenReponseDTO?> LoginAsync(UserDTO userDTO)
+        {
+            var user = await _userRepository.GetByUsernameAsync(userDTO.Username);
+            if (user is null)
+            {
+                return null;
+            }
+            if (new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, userDTO.Password) == PasswordVerificationResult.Failed)
+            {
+                return null;
+            }
+            return await CreateTokenResponse(user);
+        }
+
+        private async Task<TokenReponseDTO?> CreateTokenResponse(User user)
+        {
+            return new TokenReponseDTO
+            {
+                AccessToken = CreateToken(user),
+                RefreshToken = await GenerateAndSaveRefreshTokenAsync(user)
+            };
+        }
+
+        public async Task<User?> RegisterUserAsync(UserDTO userDTO)
 		{
-			var user = await _userRepository.GetByUsernameAsync(userDTO.Username);
+			var user = await _userRepository.AddAsync(userDTO);
+			return user;
+		}
+        public async Task<TokenReponseDTO?> RefreshTokensAsync(RefreshTokenRequestDTO refreshTokenDTO)
+        {
+			var user = await ValidateRefreshTokenAsync(refreshTokenDTO.UserId, refreshTokenDTO.RefreshToken);
 			if (user is null)
 			{
 				return null;
 			}
-			if (new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, userDTO.Password) == PasswordVerificationResult.Failed)
+            return await CreateTokenResponse(user);
+        }
+        private async Task<User?> ValidateRefreshTokenAsync(int userId, string refreshToken)
+		{
+            var user = await _userRepository.GetByIdAsync(userId);
+			if(user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpirationTime <= DateTime.UtcNow)
 			{
 				return null;
 			}
-			return CreateToken(user);
+			return user;
+        }
+        private string GenerateRefreshToken()
+		{
+			var randomNumber = new Byte[32];
+
+			using var rng = RandomNumberGenerator.Create();
+			rng.GetBytes(randomNumber);
+			return Convert.ToBase64String(randomNumber);
 		}
 
-		public async Task<User?> RegisterUserAsync(UserDTO userDTO)
+		private async Task<string> GenerateAndSaveRefreshTokenAsync(User user)
 		{
-			var user = await _userRepository.AddAsync(userDTO);
-			return user;
+			var refreshToken = GenerateRefreshToken();
+			await _userRepository.GenerateAndSaveRefreshTokenAsync(user, refreshToken);
+			return refreshToken;
 		}
 		private string CreateToken(User user)
 		{
 			var claims = new List<Claim>
 			{
-				new Claim(ClaimTypes.Name, user.Username)
+				new Claim(ClaimTypes.Name, user.Username),
+				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+				new Claim(ClaimTypes.Role, user.Role)
 			};
 
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("JwtConfig:Key")!));
@@ -63,5 +108,8 @@ namespace AfsluttendeProjektH3API.Application.Services
 
 			return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
 		}
-	}
+
+ 
+
+    }
 }

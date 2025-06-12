@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AfsluttendeProjektH3API.Domain.Entities;
 using AfsluttendeProjektH3API.Infrastructure;
 using AfsluttendeProjektH3API.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AfsluttendeProjektH3API.Controllers
 {
@@ -47,6 +48,7 @@ namespace AfsluttendeProjektH3API.Controllers
         // PUT: api/Covers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutCover(int id, Cover cover)
         {
 			if (id != cover.Id)
@@ -61,6 +63,7 @@ namespace AfsluttendeProjektH3API.Controllers
         // POST: api/Covers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Cover>> PostCover(Cover cover)
         {
 			await _service.AddAsync(cover);
@@ -70,6 +73,7 @@ namespace AfsluttendeProjektH3API.Controllers
 
         // DELETE: api/Covers/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCover(int id)
         {
 			await _service.DeleteAsync(id);

@@ -13,7 +13,9 @@ namespace AfsluttendeProjektH3API.Application.Interfaces
 		Task<User?> AddAsync(UserDTO userDTO);
 		Task DeleteAsync(int id);
 		Task<IEnumerable<User>> GetAllAsync();
-		Task<User?> GetByIdAsync(int id);
+		Task GenerateAndSaveRefreshTokenAsync(User user, string refreshToken);
+
+        Task<User?> GetByIdAsync(int id);
 		Task<User?> GetByUsernameAsync(string username);
 		Task UpdateAsync(User user);
 		bool UserExists(int id);

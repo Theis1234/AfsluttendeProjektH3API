@@ -68,6 +68,7 @@ namespace AfsluttendeProjektH3API
             builder.Services.AddScoped<ArtistService>();
             builder.Services.AddScoped<BookService>();
             builder.Services.AddScoped<CoverService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             var app = builder.Build();
 

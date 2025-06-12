@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AfsluttendeProjektH3API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250610100905_changepublishdate")]
-    partial class changepublishdate
+    [Migration("20250612073015_addedUserRoles")]
+    partial class addedUserRoles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,8 +123,8 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.Property<int>("NumberOfPages")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("PublishedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("PublishedDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .HasMaxLength(50)
@@ -134,7 +134,7 @@ namespace AfsluttendeProjektH3API.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>
@@ -161,6 +161,34 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("Covers");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.ArtistCover", b =>
