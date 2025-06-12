@@ -13,7 +13,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 			await _context.Books.FirstOrDefaultAsync(p => p.Id == id);
 
 		public async Task<IEnumerable<Book>> GetAllAsync() =>
-			await _context.Books.ToListAsync();
+			await _context.Books.Include(b => b.Author).ToListAsync();
 
 		public async Task AddAsync(Book book)
 		{
