@@ -57,7 +57,7 @@ namespace AfsluttendeProjektH3API.Infrastructure
 					  .HasMaxLength(50);
 			});
 
-			modelBuilder.Entity<Cover>(c =>
+            modelBuilder.Entity<Cover>(c =>
 			{
 				c.HasKey(e => e.Id);
 				c.Property(e => e.Title).HasMaxLength(50);

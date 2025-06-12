@@ -1,5 +1,5 @@
 @AfsluttendeProjektH3API_HostAddress = http://localhost:5107
 
-GET {{AfsluttendeProjektH3API_HostAddress}}/weatherforecast/
+GET {{AfsluttendeProjektH3API_HostAddress}}/api/books/
 Accept: application/json
 ###

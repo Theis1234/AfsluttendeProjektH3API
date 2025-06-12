@@ -20,19 +20,31 @@ namespace AfsluttendeProjektH3API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-			builder.Services.AddDbContext<AppDbContext>(options =>
-	        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularApp", 
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:4200")
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
+            });
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-			builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
-			builder.Services.AddScoped<IBookRepository, BookRepository>();
-			builder.Services.AddScoped<ICoverRepository, CoverRepository>();
+            builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+            builder.Services.AddScoped<IBookRepository, BookRepository>();
+            builder.Services.AddScoped<ICoverRepository, CoverRepository>();
             builder.Services.AddScoped<AuthorService>();
-			builder.Services.AddScoped<ArtistService>();
-			builder.Services.AddScoped<BookService>();
-			builder.Services.AddScoped<CoverService>();
+            builder.Services.AddScoped<ArtistService>();
+            builder.Services.AddScoped<BookService>();
+            builder.Services.AddScoped<CoverService>();
 
-			var app = builder.Build();
+            var app = builder.Build();
+
+            app.UseCors("AllowAngularApp");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
