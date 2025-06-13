@@ -43,8 +43,10 @@ namespace AfsluttendeProjektH3API
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true
-                };
+                    ValidateIssuerSigningKey = true,
+                    RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+                    NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+				};
             });
             builder.Services.AddAuthorization();
 
@@ -79,8 +81,9 @@ namespace AfsluttendeProjektH3API
                 app.UseSwaggerUI();
             }
             app.UseCors("AllowAngularApp");
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            
 
             app.MapControllers();
 
