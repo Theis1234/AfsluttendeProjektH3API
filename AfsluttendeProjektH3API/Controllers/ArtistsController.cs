@@ -9,6 +9,7 @@ using AfsluttendeProjektH3API.Domain.Entities;
 using AfsluttendeProjektH3API.Infrastructure;
 using AfsluttendeProjektH3API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
+using AfsluttendeProjektH3API.Application.DTOs;
 
 namespace AfsluttendeProjektH3API.Controllers
 {
@@ -64,8 +65,17 @@ namespace AfsluttendeProjektH3API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Artist>> PostArtist(Artist artist)
+        public async Task<ActionResult<Artist>> PostArtist(CreateArtistDTO artistDTO)
         {
+            var artist = new Artist
+            {
+                FirstName = artistDTO.FirstName,
+                LastName = artistDTO.LastName,
+                Nationality = artistDTO.Nationality,
+                DateOfBirth = artistDTO.DateOfBirth
+            };
+
+
             await _service.AddAsync(artist);
 
             return CreatedAtAction(nameof(GetArtist), new { id = artist.Id }, artist);

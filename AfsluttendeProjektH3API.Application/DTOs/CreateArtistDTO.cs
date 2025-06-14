@@ -8,6 +8,5 @@ namespace AfsluttendeProjektH3API.Application.DTOs
 		public string? LastName { get; set; }
 		public string? Nationality { get; set; }
 		public DateOnly DateOfBirth { get; set; }
-		public required List<Cover> Covers { get; set; } = new List<Cover>();
 	}
 }

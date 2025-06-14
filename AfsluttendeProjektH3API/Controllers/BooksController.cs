@@ -9,6 +9,8 @@ using AfsluttendeProjektH3API.Domain.Entities;
 using AfsluttendeProjektH3API.Infrastructure;
 using AfsluttendeProjektH3API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
+using AfsluttendeProjektH3API.Application.DTOs;
+using Humanizer;
 
 namespace AfsluttendeProjektH3API.Controllers
 {
@@ -16,18 +18,20 @@ namespace AfsluttendeProjektH3API.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-		private readonly BookService _service;
+		private readonly BookService _bookService;
+        private readonly AuthorService _authorService;
 
-		public BooksController(BookService service)
-		{
-			_service = service;
-		}
+        public BooksController(BookService service, AuthorService authorService)
+        {
+            _bookService = service;
+            _authorService = authorService;
+        }
 
-		// GET: api/Books
-		[HttpGet]
+        // GET: api/Books
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-			var books = await _service.GetAllAsync();
+			var books = await _bookService.GetAllAsync();
 			return Ok(books);
 		}
 
@@ -35,7 +39,7 @@ namespace AfsluttendeProjektH3API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
-			var book = await _service.GetAsync(id);
+			var book = await _bookService.GetAsync(id);
 
 			if (book == null)
 			{
@@ -56,7 +60,7 @@ namespace AfsluttendeProjektH3API.Controllers
 				return BadRequest();
 			}
 
-			await _service.UpdateAsync(book);
+			await _bookService.UpdateAsync(book);
 			return NoContent();
 		}
 
@@ -64,9 +68,24 @@ namespace AfsluttendeProjektH3API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Book>> PostBook(Book book)
+        public async Task<ActionResult<Book>> PostBook(CreateBookDTO bookDTO)
         {
-			await _service.AddAsync(book);
+            var author = await _authorService.GetAsync(bookDTO.AuthorId);
+            if (author == null)
+                return BadRequest("Author not found");
+
+            var book = new Book
+            {
+                Title = bookDTO.Title,
+                Genre = bookDTO.Genre,
+                PublishedDate = bookDTO.PublishedDate,
+                NumberOfPages = bookDTO.NumberOfPages,
+                BasePrice = bookDTO.BasePrice,
+                AuthorId = bookDTO.AuthorId,
+                Author = author
+            };
+
+            await _bookService.AddAsync(book);
 
 			return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
 		}
@@ -76,7 +95,7 @@ namespace AfsluttendeProjektH3API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteBook(int id)
         {
-			await _service.DeleteAsync(id);
+			await _bookService.DeleteAsync(id);
 			return NoContent();
 		}
     }

@@ -2,9 +2,9 @@
 {
 	public class ArtistCover
 	{
-		public required Artist Artist { get; set; }
-		public int ArtistId { get; set; }
-		public required Cover Cover { get; set; }
-		public int CoverId { get; set; }
+		public Artist Artist { get; set; } = null!;
+        public int ArtistId { get; set; }
+		public Cover Cover { get; set; } = null!;
+        public int CoverId { get; set; }
 	}
 }

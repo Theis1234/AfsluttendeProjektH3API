@@ -33,7 +33,7 @@ namespace AfsluttendeProjektH3API.Infrastructure
 
 			modelBuilder.Entity<ArtistCover>()
 				.HasOne(ba => ba.Cover)
-				.WithMany(a => a.ArtistCover)
+				.WithMany(a => a.ArtistCovers)
 				.HasForeignKey(ba => ba.CoverId);
 
 			modelBuilder.Entity<Author>(a =>

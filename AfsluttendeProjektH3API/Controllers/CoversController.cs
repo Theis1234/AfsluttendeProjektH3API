@@ -9,6 +9,8 @@ using AfsluttendeProjektH3API.Domain.Entities;
 using AfsluttendeProjektH3API.Infrastructure;
 using AfsluttendeProjektH3API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
+using AfsluttendeProjektH3API.Application.DTOs;
+using Humanizer;
 
 namespace AfsluttendeProjektH3API.Controllers
 {
@@ -64,9 +66,21 @@ namespace AfsluttendeProjektH3API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Cover>> PostCover(Cover cover)
+        public async Task<ActionResult<Cover>> PostCover(CreateCoverDTO coverDTO)
         {
-			await _service.AddAsync(cover);
+            var cover = new Cover
+            {
+                Title = coverDTO.Title,
+                DigitalOnly = coverDTO.DigitalOnly,
+                BookId = coverDTO.BookId
+            };
+            cover.ArtistCovers = coverDTO.ArtistIds.Select(artistId => new ArtistCover
+            {
+                ArtistId = artistId,
+                Cover = cover
+            }).ToList();
+
+            await _service.AddAsync(cover);
 
 			return CreatedAtAction(nameof(GetCover), new { id = cover.Id }, cover);
 		}

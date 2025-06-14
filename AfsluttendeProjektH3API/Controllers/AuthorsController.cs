@@ -9,6 +9,7 @@ using AfsluttendeProjektH3API.Domain.Entities;
 using AfsluttendeProjektH3API.Infrastructure;
 using AfsluttendeProjektH3API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
+using AfsluttendeProjektH3API.Application.DTOs;
 
 namespace AfsluttendeProjektH3API.Controllers
 {
@@ -64,9 +65,20 @@ namespace AfsluttendeProjektH3API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Author>> PostAuthor(Author author)
+        public async Task<ActionResult<Author>> PostAuthor(CreateAuthorDTO authorDTO)
         {
-			await _service.AddAsync(author);
+            var author = new Author
+            {
+                FirstName = authorDTO.FirstName,
+                LastName = authorDTO.LastName,
+                Nationality = authorDTO.Nationality,
+                NumberOfBooksPublished = authorDTO.NumberOfBooksPublished,
+                DateOfBirth = authorDTO.DateOfBirth,
+                LastPublishedBook = authorDTO.LastPublishedBook
+            };
+
+
+            await _service.AddAsync(author);
 
 			return CreatedAtAction(nameof(GetAuthor), new { id = author.Id }, author);
 		}

@@ -9,7 +9,6 @@ namespace AfsluttendeProjektH3API.Application.DTOs
 		public DateOnly PublishedDate { get; set; }
 		public int NumberOfPages { get; set; }
 		public double BasePrice { get; set; }
-		public required Author Author { get; set; }
 		public int AuthorId { get; set; }
 	}
 }

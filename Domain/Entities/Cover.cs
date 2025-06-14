@@ -7,6 +7,6 @@
 		public bool DigitalOnly { get; set; }
 		public Book? Book { get; set; }
 		public int BookId { get; set; }
-		public required List<ArtistCover> ArtistCover { get; set; } = new List<ArtistCover>();
+		public List<ArtistCover> ArtistCovers { get; set; } = new List<ArtistCover>();
 	}
 }
