@@ -10,7 +10,8 @@ namespace AfsluttendeProjektH3API.Infrastructure
 
 		public DbSet<Book> Books { get; set; }
 		public DbSet<Artist> Artists { get; set; }
-		public DbSet<Author> Authors { get; set; }
+        public DbSet<ArtistCover> ArtistCovers { get; set; }
+        public DbSet<Author> Authors { get; set; }
 		public DbSet<Cover> Covers { get; set; }
 		public DbSet<User> Users { get; set; }
 
@@ -26,15 +27,20 @@ namespace AfsluttendeProjektH3API.Infrastructure
 
 			modelBuilder.Entity<ArtistCover>().HasKey(ac => new { ac.ArtistId, ac.CoverId });
 
-			modelBuilder.Entity<ArtistCover>()
+            modelBuilder.Entity<ArtistCover>()
+			.ToTable("ArtistCover");
+
+            modelBuilder.Entity<ArtistCover>()
 			.HasOne(ba => ba.Artist)
 			.WithMany(b => b.ArtistCovers)
-			.HasForeignKey(ba => ba.ArtistId);
+			.HasForeignKey(ba => ba.ArtistId)
+			.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<ArtistCover>()
 				.HasOne(ba => ba.Cover)
 				.WithMany(a => a.ArtistCovers)
-				.HasForeignKey(ba => ba.CoverId);
+				.HasForeignKey(ba => ba.CoverId)
+				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Author>(a =>
 			{

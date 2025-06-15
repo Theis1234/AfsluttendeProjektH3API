@@ -5,15 +5,15 @@ namespace AfsluttendeProjektH3API.Application.Services
 {
 	public class CoverService
 	{
-		private readonly ICoverRepository _coverService;
+		private readonly ICoverRepository _coverRepository;
 		public CoverService(ICoverRepository coverRepository)
 		{
-			_coverService = coverRepository;
+			_coverRepository = coverRepository;
 		}
-		public Task<Cover?> GetAsync(int id) => _coverService.GetByIdAsync(id);
-		public Task<IEnumerable<Cover>> GetAllAsync() => _coverService.GetAllAsync();
-		public Task AddAsync(Cover cover) => _coverService.AddAsync(cover);
-		public Task UpdateAsync(Cover cover) => _coverService.UpdateAsync(cover);
-		public Task DeleteAsync(int id) => _coverService.DeleteAsync(id);
+		public Task<Cover?> GetAsync(int id) => _coverRepository.GetByIdAsync(id);
+		public Task<IEnumerable<Cover>> GetAllAsync() => _coverRepository.GetAllAsync();
+		public Task AddAsync(Cover cover) => _coverRepository.AddAsync(cover);
+		public Task UpdateAsync(Cover cover) => _coverRepository.UpdateAsync(cover);
+		public Task DeleteAsync(int id) => _coverRepository.DeleteAsync(id);
 	}
 }

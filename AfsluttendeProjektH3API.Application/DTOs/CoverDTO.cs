@@ -2,11 +2,11 @@
 
 namespace AfsluttendeProjektH3API.Application.DTOs
 {
-	public class CreateCoverDTO
+	public class CoverDTO
 	{
 		public required string Title { get; set; }
 		public bool DigitalOnly { get; set; }
 		public int BookId { get; set; }
-		public required List<int> ArtistIds = new List<int>();
+		public List<int> ArtistIds { get; set; } = new List<int>();
 	}
 }

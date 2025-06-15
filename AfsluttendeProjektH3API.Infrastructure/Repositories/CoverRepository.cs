@@ -10,10 +10,10 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 		public CoverRepository(AppDbContext context) => _context = context;
 
 		public async Task<Cover?> GetByIdAsync(int id) =>
-			await _context.Covers.Include(b => b.Book).FirstOrDefaultAsync(p => p.Id == id);
+			await _context.Covers.Include(c => c.Book).Include(c => c.ArtistCovers).ThenInclude(ac => ac.Artist).FirstOrDefaultAsync(p => p.Id == id);
 
 		public async Task<IEnumerable<Cover>> GetAllAsync() =>
-			await _context.Covers.Include(b => b.Book).ToListAsync();
+			await _context.Covers.Include(c => c.Book).ToListAsync();
 
 		public async Task AddAsync(Cover cover)
 		{

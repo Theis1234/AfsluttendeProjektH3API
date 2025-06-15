@@ -29,10 +29,21 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 
 		public async Task DeleteAsync(int id)
 		{
-			var entity = await _context.Artists.FindAsync(id);
-			if (entity != null)
+            var artist = _context.Artists
+				.Include(a => a.ArtistCovers)
+				.ThenInclude(ac => ac.Cover)
+				.FirstOrDefault(a => a.Id == id);
+
+            if (artist != null)
 			{
-				_context.Artists.Remove(entity);
+                var orphanCovers = artist.ArtistCovers
+					.Where(ac => _context.ArtistCovers.Count(linkedAc => linkedAc.CoverId == ac.CoverId) == 1)
+					.Select(ac => ac.Cover)
+					.ToList();
+
+                _context.Covers.RemoveRange(orphanCovers);
+
+                _context.Artists.Remove(artist);
 				await _context.SaveChangesAsync();
 			}
 		}

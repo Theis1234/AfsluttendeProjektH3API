@@ -51,38 +51,65 @@ namespace AfsluttendeProjektH3API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutCover(int id, Cover cover)
+        public async Task<IActionResult> PutCover(int id, CoverDTO coverDTO)
         {
-			if (id != cover.Id)
-			{
-				return BadRequest();
-			}
+            var cover = await _service.GetAsync(id);
 
-			await _service.UpdateAsync(cover);
-			return NoContent();
-		}
+            if (cover == null)
+                return NotFound();
 
+            cover.Title = coverDTO.Title;
+            cover.DigitalOnly = coverDTO.DigitalOnly;
+            cover.BookId = coverDTO.BookId;
+
+            cover.ArtistCovers.Clear();
+            foreach (var artistId in coverDTO.ArtistIds)
+            {
+                cover.ArtistCovers.Add(new ArtistCover
+                {
+                    ArtistId = artistId,
+                    CoverId = cover.Id
+                });               
+            }
+            await _service.UpdateAsync(cover);
+            return NoContent();
+        }
         // POST: api/Covers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Cover>> PostCover(CreateCoverDTO coverDTO)
+        public async Task<ActionResult<Cover>> PostCover(CoverDTO coverDTO)
         {
-            var cover = new Cover
+            try
             {
-                Title = coverDTO.Title,
-                DigitalOnly = coverDTO.DigitalOnly,
-                BookId = coverDTO.BookId
-            };
-            cover.ArtistCovers = coverDTO.ArtistIds.Select(artistId => new ArtistCover
+                var cover = new Cover
+                {
+                    Title = coverDTO.Title,
+                    DigitalOnly = coverDTO.DigitalOnly,
+                    BookId = coverDTO.BookId
+                };
+                foreach (var artistId in coverDTO.ArtistIds)
+                {
+                    var artistCover = new ArtistCover
+                    {
+                        ArtistId = artistId,
+                        Cover = cover
+                    };
+
+                    cover.ArtistCovers.Add(artistCover);
+                }
+
+                await _service.AddAsync(cover);
+
+                return CreatedAtAction(nameof(GetCover), new { id = cover.Id }, cover);
+
+            }
+            catch (Exception ex)
             {
-                ArtistId = artistId,
-                Cover = cover
-            }).ToList();
 
-            await _service.AddAsync(cover);
-
-			return CreatedAtAction(nameof(GetCover), new { id = cover.Id }, cover);
+                return StatusCode(500, ex.ToString());
+            }
+          
 		}
 
         // DELETE: api/Covers/5
