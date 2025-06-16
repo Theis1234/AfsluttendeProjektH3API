@@ -53,12 +53,19 @@ namespace AfsluttendeProjektH3API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutBook(int id, Book book)
+        public async Task<IActionResult> PutBook(int id, BookDTO bookDTO)
         {
-			if (id != book.Id)
-			{
-				return BadRequest();
-			}
+			var book = await _bookService.GetAsync(id);
+
+			if (book == null)
+				return NotFound();
+
+            book.Title = bookDTO.Title;
+            book.Genre = bookDTO.Genre;
+            book.AuthorId = bookDTO.AuthorId;
+            book.PublishedDate = bookDTO.PublishedDate;
+            book.NumberOfPages = bookDTO.NumberOfPages;
+            book.BasePrice = bookDTO.BasePrice;
 
 			await _bookService.UpdateAsync(book);
 			return NoContent();
@@ -68,9 +75,9 @@ namespace AfsluttendeProjektH3API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Book>> PostBook(CreateBookDTO bookDTO)
+        public async Task<ActionResult<Book>> PostBook(BookDTO bookDTO)
         {
-            var author = await _authorService.GetAsync(bookDTO.AuthorId);
+                var author = await _authorService.GetAsync(bookDTO.AuthorId);
             if (author == null)
                 return BadRequest("Author not found");
 

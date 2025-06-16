@@ -2,7 +2,7 @@
 
 namespace AfsluttendeProjektH3API.Application.DTOs
 {
-	public class CreateBookDTO
+	public class BookDTO
 	{
 		public string? Title { get; set; }
 		public string? Genre { get; set; }
