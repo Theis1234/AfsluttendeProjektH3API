@@ -29,11 +29,11 @@ namespace AfsluttendeProjektH3API.Controllers
 
         // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks(string? title, string? genre, string? authorName)
         {
-			var books = await _bookService.GetAllAsync();
-			return Ok(books);
-		}
+            var books = await _bookService.GetAllAsync(title, genre, authorName);
+            return Ok(books);
+        }
 
         // GET: api/Books/5
         [HttpGet("{id}")]

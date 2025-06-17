@@ -26,9 +26,9 @@ namespace AfsluttendeProjektH3API.Controllers
 
         // GET: api/Artists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Artist>>> GetArtists()
+        public async Task<ActionResult<IEnumerable<Artist>>> GetArtists(string? firstName, string? lastName, string? nationality)
         {
-            var artists =  await _service.GetAllAsync();
+            var artists =  await _service.GetAllAsync(firstName, lastName, nationality);
             return Ok(artists);
         }
 

@@ -11,7 +11,8 @@ namespace AfsluttendeProjektH3API.Application.Services
 			_authorRepository = authorRepository;
 		}
 		public Task<Author?> GetAsync(int id) => _authorRepository.GetByIdAsync(id);
-		public Task<IEnumerable<Author>> GetAllAsync() => _authorRepository.GetAllAsync();
+        public Task<IEnumerable<Author>> GetAllAsync(string? firstName, string? lastName, string? nationality)
+    => _authorRepository.GetFilteredAsync(firstName, lastName, nationality);     
 		public Task AddAsync(Author author) => _authorRepository.AddAsync(author);
 		public Task UpdateAsync(Author author) => _authorRepository.UpdateAsync(author);
 		public Task DeleteAsync(int id) => _authorRepository.DeleteAsync(id);

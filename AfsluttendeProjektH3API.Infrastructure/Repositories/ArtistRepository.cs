@@ -15,7 +15,24 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 		public async Task<IEnumerable<Artist>> GetAllAsync() =>
 			await _context.Artists.ToListAsync();
 
-		public async Task AddAsync(Artist artist)
+        public async Task<IEnumerable<Artist>> GetFilteredAsync(string? firstName, string? lastName, string? nationality)
+        {
+            var query = _context.Artists
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(firstName))
+                query = query.Where(b => b.FirstName.Contains(firstName));
+
+            if (!string.IsNullOrWhiteSpace(lastName))
+                query = query.Where(b => b.LastName.Contains(lastName));
+
+            if (!string.IsNullOrWhiteSpace(nationality))
+                query = query.Where(b => b.Nationality.Contains(nationality));
+
+            return await query.ToListAsync();
+        }
+
+        public async Task AddAsync(Artist artist)
 		{
 			_context.Add(artist);
 			await _context.SaveChangesAsync();

@@ -14,8 +14,23 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 
 		public async Task<IEnumerable<Author>> GetAllAsync() =>
 			await _context.Authors.ToListAsync();
+        public async Task<IEnumerable<Author>> GetFilteredAsync(string? firstName, string? lastName, string? nationality)
+        {
+            var query = _context.Authors
+                .AsQueryable();
 
-		public async Task AddAsync(Author author)
+            if (!string.IsNullOrWhiteSpace(firstName))
+                query = query.Where(b => b.FirstName.Contains(firstName));
+
+            if (!string.IsNullOrWhiteSpace(lastName))
+                query = query.Where(b => b.LastName.Contains(lastName));
+
+            if (!string.IsNullOrWhiteSpace(nationality))
+                query = query.Where(b => b.Nationality.Contains(nationality));
+
+            return await query.ToListAsync();
+        }
+        public async Task AddAsync(Author author)
 		{
 			_context.Add(author);
 			await _context.SaveChangesAsync();
@@ -41,5 +56,6 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 		{
 			return _context.Authors.Any(a => a.Id == id);
 		}
-	}
+
+    }
 }

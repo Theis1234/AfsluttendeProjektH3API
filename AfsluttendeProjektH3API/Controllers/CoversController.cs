@@ -27,9 +27,9 @@ namespace AfsluttendeProjektH3API.Controllers
 
 		// GET: api/Covers
 		[HttpGet]
-        public async Task<ActionResult<IEnumerable<Cover>>> GetCovers()
+        public async Task<ActionResult<IEnumerable<Cover>>> GetCovers(string? title, bool? digitalOnly)
         {
-			var covers = await _service.GetAllAsync();
+			var covers = await _service.GetAllAsync(title, digitalOnly);
 			return Ok(covers);
 		}
 

@@ -11,7 +11,7 @@ namespace AfsluttendeProjektH3API.Application.Services
 			_coverRepository = coverRepository;
 		}
 		public Task<Cover?> GetAsync(int id) => _coverRepository.GetByIdAsync(id);
-		public Task<IEnumerable<Cover>> GetAllAsync() => _coverRepository.GetAllAsync();
+		public Task<IEnumerable<Cover>> GetAllAsync(string? title, bool? digitalOnly) => _coverRepository.GetFilteredAsync(title, digitalOnly);
 		public Task AddAsync(Cover cover) => _coverRepository.AddAsync(cover);
 		public Task UpdateAsync(Cover cover) => _coverRepository.UpdateAsync(cover);
 		public Task DeleteAsync(int id) => _coverRepository.DeleteAsync(id);

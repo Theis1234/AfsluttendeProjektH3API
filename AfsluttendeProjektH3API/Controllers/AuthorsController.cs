@@ -26,11 +26,11 @@ namespace AfsluttendeProjektH3API.Controllers
 
 		// GET: api/Authors
 		[HttpGet]
-        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors(string? firstName, string? lastName, string? nationality)
         {
-			var authors = await _service.GetAllAsync();
-			return Ok(authors);
-		}
+            var authors = await _service.GetAllAsync(firstName, lastName, nationality);
+            return Ok(authors);
+        }
 
         // GET: api/Authors/5
         [HttpGet("{id}")]

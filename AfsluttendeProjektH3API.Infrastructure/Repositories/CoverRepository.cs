@@ -15,7 +15,26 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 		public async Task<IEnumerable<Cover>> GetAllAsync() =>
 			await _context.Covers.Include(c => c.Book).ToListAsync();
 
-		public async Task AddAsync(Cover cover)
+        public async Task<IEnumerable<Cover>> GetFilteredAsync(string? title, bool? digitalOnly)
+        {
+            var query = _context.Covers
+				.Include(c => c.Book)  
+				.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                query = query.Where(c => c.Title.Contains(title));
+            }
+
+            if (digitalOnly.HasValue)
+            {
+                query = query.Where(c => c.DigitalOnly == digitalOnly.Value);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task AddAsync(Cover cover)
 		{
 			_context.Add(cover);
 			await _context.SaveChangesAsync();

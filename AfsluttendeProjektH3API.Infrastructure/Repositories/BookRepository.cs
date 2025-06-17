@@ -15,7 +15,30 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 		public async Task<IEnumerable<Book>> GetAllAsync() =>
 			await _context.Books.Include(b => b.Author).ToListAsync();
 
-		public async Task AddAsync(Book book)
+        public async Task<IEnumerable<Book>> GetFilteredAsync(string? title, string? genre, string? authorName)
+        {
+            var query = _context.Books
+                .Include(b => b.Author)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(title))
+                query = query.Where(b => b.Title.Contains(title));
+
+            if (!string.IsNullOrWhiteSpace(genre))
+                query = query.Where(b => b.Genre.Contains(genre));
+
+            if (!string.IsNullOrWhiteSpace(authorName))
+            {
+                var lowerName = authorName.ToLower();
+                query = query.Where(b =>
+                    (b.Author.FirstName + " " + b.Author.LastName).ToLower().Contains(lowerName)
+                );
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task AddAsync(Book book)
 		{
 			_context.Add(book);
 			await _context.SaveChangesAsync();
