@@ -31,6 +31,36 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 
             return await query.ToListAsync();
         }
+        public async Task<IEnumerable<Artist>> GetByArtistLastName(string? artistLastName)
+        {
+            var query = _context.Artists               
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(artistLastName))
+                query = query.Where(b => b.LastName == artistLastName);
+
+            return await query.ToListAsync();
+        }
+        public async Task<IEnumerable<Artist>> GetByArtistFirstName(string? artistFirstName)
+        {
+            var query = _context.Artists
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(artistFirstName))
+                query = query.Where(b => b.FirstName == artistFirstName);
+
+            return await query.ToListAsync();
+        }
+        public async Task<IEnumerable<Artist>> GetArtistsByNationality(string? nationality)
+        {
+            var query = _context.Artists
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(nationality))
+                query = query.Where(b => b.Nationality == nationality);
+
+            return await query.ToListAsync();
+        }
 
         public async Task AddAsync(Artist artist)
 		{

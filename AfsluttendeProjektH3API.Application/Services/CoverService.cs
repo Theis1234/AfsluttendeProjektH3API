@@ -1,5 +1,6 @@
 ﻿using AfsluttendeProjektH3API.Application.Interfaces;
 using AfsluttendeProjektH3API.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AfsluttendeProjektH3API.Application.Services
 {
@@ -15,5 +16,9 @@ namespace AfsluttendeProjektH3API.Application.Services
 		public Task AddAsync(Cover cover) => _coverRepository.AddAsync(cover);
 		public Task UpdateAsync(Cover cover) => _coverRepository.UpdateAsync(cover);
 		public Task DeleteAsync(int id) => _coverRepository.DeleteAsync(id);
-	}
+        public Task<Cover?> GetCoverByBookIdAsync(int id) => _coverRepository.GetCoverByBookIdAsync(id);
+        public Task<IEnumerable<Cover>> GetCoversByArtistAsync(int artistId) => _coverRepository.GetCoversByArtistAsync(artistId);
+        public Task<IEnumerable<Cover>> GetDigitalOnlyCoversAsync(bool digitalOnly) => _coverRepository.GetDigitalOnlyCoversAsync(digitalOnly);
+
+    }
 }

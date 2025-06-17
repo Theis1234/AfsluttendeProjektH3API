@@ -1,6 +1,7 @@
 ﻿using AfsluttendeProjektH3API.Application.Interfaces;
 using AfsluttendeProjektH3API.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 {
@@ -59,5 +60,20 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 		{
 			return _context.Covers.Any(c => c.Id == id);
 		}
-	}
+
+        public async Task<Cover?> GetCoverByBookIdAsync(int bookId)
+        {
+            return await _context.Covers.FirstOrDefaultAsync(a => a.BookId == bookId);
+        }
+
+        public async Task<IEnumerable<Cover>> GetCoversByArtistAsync(int artistId)
+        {
+            return await _context.Covers.Include(c => c.ArtistCovers).ThenInclude(ac => ac.Artist).Where(c => c.ArtistCovers.Any(ac => ac.ArtistId == artistId)).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Cover>> GetDigitalOnlyCoversAsync(bool digitalOnly)
+        {
+            return await _context.Covers.Where(a => a.DigitalOnly == digitalOnly).ToListAsync();
+        }
+    }
 }

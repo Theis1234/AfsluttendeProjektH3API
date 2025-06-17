@@ -57,5 +57,37 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 			return _context.Authors.Any(a => a.Id == id);
 		}
 
+        public async Task<IEnumerable<Author>> GetAuthorsByNationality(string? nationality)
+        {
+            var query = _context.Authors
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(nationality))
+                query = query.Where(b => b.Nationality.Contains(nationality));
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Author>> GetByAuthorsFirstName(string? authorFirstName)
+        {
+            var query = _context.Authors
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(authorFirstName))
+                query = query.Where(b => b.FirstName.Contains(authorFirstName));
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Author>> GetByAuthorsLastName(string? authorLastName)
+        {
+            var query = _context.Authors
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(authorLastName))
+                query = query.Where(b => b.LastName.Contains(authorLastName));
+
+            return await query.ToListAsync();
+        }
     }
 }

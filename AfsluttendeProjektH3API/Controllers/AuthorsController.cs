@@ -45,6 +45,28 @@ namespace AfsluttendeProjektH3API.Controllers
 
 			return author;
 		}
+        [HttpGet("lastName/{lastName}")]
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthorsByLastName(string lastName)
+        {
+            var artists = await _service.GetAllAuthorsByLastNameAsync(lastName);
+
+            return Ok(artists);
+        }
+        [HttpGet("firstName/{firstName}")]
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthorsByFirstName(string firstName)
+        {
+            var artists = await _service.GetAllAuthorsByFirstNameAsync(firstName);
+
+            return Ok(artists);
+        }
+        [HttpGet("nationality/{nationality}")]
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthorssByNationality(string nationality)
+        {
+            var artists = await _service.GetAllAuthorsByNationalityAsync(nationality);
+
+            return Ok(artists);
+        }
+
 
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

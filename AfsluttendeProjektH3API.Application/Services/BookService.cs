@@ -11,6 +11,8 @@ namespace AfsluttendeProjektH3API.Application.Services
 			_bookRepository = bookRepository;
 		}
 		public Task<Book?> GetAsync(int id) => _bookRepository.GetByIdAsync(id);
+        public Task<IEnumerable<Book>> GetAllBooksByAuthorNameAsync(string? authorName)
+    => _bookRepository.GetByAuthorLastName(authorName);
         public Task<IEnumerable<Book>> GetAllAsync(string? title, string? genre, string? authorName)
     => _bookRepository.GetFilteredAsync(title, genre, authorName);
         public Task AddAsync(Book book) => _bookRepository.AddAsync(book);

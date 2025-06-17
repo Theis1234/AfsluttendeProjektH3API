@@ -46,7 +46,43 @@ namespace AfsluttendeProjektH3API.Controllers
 
 			return cover;
 		}
+        [HttpGet("book/{id}")]
+        public async Task<ActionResult<Cover>> GetCoverByBookId(int id)
+        {
+            var cover = await _service.GetCoverByBookIdAsync(id);
 
+            if (cover == null)
+            {
+                return NotFound();
+            }
+
+            return cover;
+        }
+
+        [HttpGet("artist/{id}")]
+        public async Task<ActionResult<IEnumerable<Cover>>> GetCoversByArtist(int id)
+        {
+            var covers = await _service.GetCoversByArtistAsync(id);
+
+            if (covers == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(covers);
+        }
+        [HttpGet("digitalOnly/{digitalOnly}")]
+        public async Task<ActionResult<IEnumerable<Cover>>> GetDigitalOnlyCovers(bool digitalOnly)
+        {
+            var covers = await _service.GetDigitalOnlyCoversAsync(digitalOnly);
+
+            if (covers == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(covers);
+        }
         // PUT: api/Covers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
