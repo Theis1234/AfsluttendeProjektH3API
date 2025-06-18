@@ -8,7 +8,7 @@ namespace AfsluttendeProjektH3API.Application.Interfaces
 		Task DeleteAsync(int id);
 		Task<IEnumerable<Cover>> GetAllAsync();
         Task<Cover> GetCoverByBookIdAsync(int bookId);
-        Task<IEnumerable<Cover>> GetCoversByArtistAsync(int artistId);
+        Task<IEnumerable<Cover>> GetCoversByArtistIdAsync(int artistId);
         Task<IEnumerable<Cover>> GetDigitalOnlyCoversAsync(bool digitalOnly);
         Task<IEnumerable<Cover>> GetFilteredAsync(string? title, bool? digitalOnly);
         Task<Cover?> GetByIdAsync(int id);

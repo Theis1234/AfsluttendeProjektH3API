@@ -66,7 +66,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
             return await _context.Covers.FirstOrDefaultAsync(a => a.BookId == bookId);
         }
 
-        public async Task<IEnumerable<Cover>> GetCoversByArtistAsync(int artistId)
+        public async Task<IEnumerable<Cover>> GetCoversByArtistIdAsync(int artistId)
         {
             return await _context.Covers.Include(c => c.ArtistCovers).ThenInclude(ac => ac.Artist).Where(c => c.ArtistCovers.Any(ac => ac.ArtistId == artistId)).ToListAsync();
         }

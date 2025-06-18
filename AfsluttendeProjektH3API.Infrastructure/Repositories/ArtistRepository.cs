@@ -21,13 +21,13 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(firstName))
-                query = query.Where(b => b.FirstName.Contains(firstName));
+                query = query.Where(b => b.FirstName.ToLower().Contains(firstName.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(lastName))
-                query = query.Where(b => b.LastName.Contains(lastName));
+                query = query.Where(b => b.LastName.ToLower().Contains(lastName.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(nationality))
-                query = query.Where(b => b.Nationality.Contains(nationality));
+                query = query.Where(b => b.Nationality.ToLower().Contains(nationality.ToLower()));
 
             return await query.ToListAsync();
         }
@@ -37,7 +37,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(artistLastName))
-                query = query.Where(b => b.LastName == artistLastName);
+                query = query.Where(b => b.LastName.ToLower() == artistLastName.ToLower());
 
             return await query.ToListAsync();
         }
@@ -47,7 +47,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(artistFirstName))
-                query = query.Where(b => b.FirstName == artistFirstName);
+                query = query.Where(b => b.FirstName.ToLower() == artistFirstName.ToLower());
 
             return await query.ToListAsync();
         }
@@ -57,7 +57,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(nationality))
-                query = query.Where(b => b.Nationality == nationality);
+                query = query.Where(b => b.Nationality.ToLower() == nationality.ToLower());
 
             return await query.ToListAsync();
         }
