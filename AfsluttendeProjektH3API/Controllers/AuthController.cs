@@ -26,7 +26,11 @@ namespace AfsluttendeProjektH3API.Controllers
 		[HttpPost("register")]
 		public async Task<ActionResult<User>> Register(UserDTO userDTO)
 		{
-			var user = await _authService.RegisterUserAsync(userDTO);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await _authService.RegisterUserAsync(userDTO);
 			if (user is null)
 			{
 				return BadRequest("Username already exists");
