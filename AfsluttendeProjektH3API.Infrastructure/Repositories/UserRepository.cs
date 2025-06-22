@@ -28,7 +28,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 			await _context.SaveChangesAsync();
         }
 
-		public async Task<User?> AddAsync(UserDTO userDTO)
+		public async Task<User?> AddAsync(LoginUserDTO userDTO)
 		{
 			if (await _context.Users.AnyAsync(p => p.Username == userDTO.Username))
 			{

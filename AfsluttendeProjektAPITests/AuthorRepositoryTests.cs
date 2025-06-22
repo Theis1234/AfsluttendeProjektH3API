@@ -26,7 +26,7 @@ namespace AfsluttendeProjektAPITests
             var authors = new List<Author>
         {
             new Author { Id = 1, FirstName = "Test Person 1", LastName = "John", LastPublishedBook = "Last Publish Test", DateOfBirth = new DateOnly(1970, 1, 1), NumberOfBooksPublished = 200 },
-            new Author { Id = 2, FirstName = "Test Person 2", LastName = "Egon",  LastPublishedBook = "Last Publish Test 2", Nationality = "Japanese", DateOfBirth = new DateOnly(1972, 1, 1), NumberOfBooksPublished = 300}
+            new Author { Id = 2, FirstName = "Test Person 2", LastName = "Egon",  LastPublishedBook = "Last Publish Test 2", DateOfBirth = new DateOnly(1972, 1, 1), NumberOfBooksPublished = 300}
         };
 
             context.Authors.AddRange(authors);

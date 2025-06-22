@@ -59,7 +59,6 @@ namespace AfsluttendeProjektH3API.Controllers
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutBook(int id, BookDTO bookDTO)
         {
 			var book = await _bookService.GetAsync(id);
@@ -68,8 +67,8 @@ namespace AfsluttendeProjektH3API.Controllers
 				return NotFound();
 
             book.Title = bookDTO.Title;
-            book.Genre = bookDTO.Genre;
             book.AuthorId = bookDTO.AuthorId;
+            book.GenreId = bookDTO.GenreId;
             book.PublishedDate = bookDTO.PublishedDate;
             book.NumberOfPages = bookDTO.NumberOfPages;
             book.BasePrice = bookDTO.BasePrice;
@@ -81,7 +80,6 @@ namespace AfsluttendeProjektH3API.Controllers
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Book>> PostBook(BookDTO bookDTO)
         {
                 var author = await _authorService.GetAsync(bookDTO.AuthorId);
@@ -91,12 +89,13 @@ namespace AfsluttendeProjektH3API.Controllers
             var book = new Book
             {
                 Title = bookDTO.Title,
-                Genre = bookDTO.Genre,
                 PublishedDate = bookDTO.PublishedDate,
                 NumberOfPages = bookDTO.NumberOfPages,
+                GenreId = bookDTO.GenreId,
                 BasePrice = bookDTO.BasePrice,
                 AuthorId = bookDTO.AuthorId,
-                Author = author
+                Author = author,
+                Editions = bookDTO.Editions
             };
 
             await _bookService.AddAsync(book);
@@ -106,7 +105,6 @@ namespace AfsluttendeProjektH3API.Controllers
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteBook(int id)
         {
 			await _bookService.DeleteAsync(id);

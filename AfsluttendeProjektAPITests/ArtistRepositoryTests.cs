@@ -25,8 +25,8 @@ namespace AfsluttendeProjektAPITests
         {
             var artists = new List<Artist>
         {
-            new Artist { Id = 1, FirstName = "Test Person Banana", LastName = "Simons", Nationality = "Greenlandic", DateOfBirth = new DateOnly(1973, 1, 1) },
-            new Artist { Id = 2, FirstName = "Test Person 2", LastName = "Styles", Nationality = "Faroese", DateOfBirth = new DateOnly(1972, 1, 1) }
+            new Artist { Id = 1, FirstName = "Test Person Banana", LastName = "Simons", DateOfBirth = new DateOnly(1973, 1, 1) },
+            new Artist { Id = 2, FirstName = "Test Person 2", LastName = "Styles", DateOfBirth = new DateOnly(1972, 1, 1) }
         };
 
             context.Artists.AddRange(artists);

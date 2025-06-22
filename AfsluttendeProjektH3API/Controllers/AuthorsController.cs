@@ -71,32 +71,47 @@ namespace AfsluttendeProjektH3API.Controllers
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutAuthor(int id, Author author)
+        public async Task<IActionResult> PutAuthor(int id, AuthorDTO authorDTO)
         {
-			if (id != author.Id)
-			{
-				return BadRequest();
-			}
+            var author = await _service.GetAsync(id);
 
-			await _service.UpdateAsync(author);
+            if (author == null)
+                return NotFound();
+
+            author.FirstName = authorDTO.FirstName;
+            author.LastName = authorDTO.LastName;
+            author.DateOfBirth = authorDTO.DateOfBirth;
+            author.NumberOfBooksPublished = authorDTO.NumberOfBooksPublished;
+            author.LastPublishedBook = authorDTO.LastPublishedBook;
+            author.Address = authorDTO.Address;
+            author.Biography = authorDTO.Biography;
+            author.ContactInfo = authorDTO.ContactInfo;
+            author.EducationId = authorDTO.EducationId;
+            author.PublisherId = authorDTO.PublisherId;
+            author.NationalityId = authorDTO.NationalityId;
+
+            await _service.UpdateAsync(author);
 			return NoContent();
 		}
 
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Author>> PostAuthor(CreateAuthorDTO authorDTO)
+        public async Task<ActionResult<Author>> PostAuthor(AuthorDTO authorDTO)
         {
             var author = new Author
             {
                 FirstName = authorDTO.FirstName,
                 LastName = authorDTO.LastName,
-                Nationality = authorDTO.Nationality,
                 NumberOfBooksPublished = authorDTO.NumberOfBooksPublished,
                 DateOfBirth = authorDTO.DateOfBirth,
-                LastPublishedBook = authorDTO.LastPublishedBook
+                LastPublishedBook = authorDTO.LastPublishedBook,
+                Address = authorDTO.Address,
+                Biography = authorDTO.Biography,
+                ContactInfo = authorDTO.ContactInfo,
+                EducationId = authorDTO.EducationId,
+                PublisherId = authorDTO.PublisherId,
+                NationalityId = authorDTO.NationalityId
             };
 
 
@@ -107,7 +122,6 @@ namespace AfsluttendeProjektH3API.Controllers
 
         // DELETE: api/Authors/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
 			await _service.DeleteAsync(id);

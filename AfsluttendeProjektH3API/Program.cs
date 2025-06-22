@@ -1,5 +1,6 @@
 
 using AfsluttendeProjektH3API;
+using AfsluttendeProjektH3API.Application;
 using AfsluttendeProjektH3API.Application.Interfaces;
 using AfsluttendeProjektH3API.Application.Services;
 using AfsluttendeProjektH3API.Infrastructure;
@@ -66,11 +67,18 @@ namespace AfsluttendeProjektH3API
 			builder.Services.AddScoped<IBookRepository, BookRepository>();
 			builder.Services.AddScoped<ICoverRepository, CoverRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<AuthorService>();
             builder.Services.AddScoped<ArtistService>();
             builder.Services.AddScoped<BookService>();
             builder.Services.AddScoped<CoverService>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<AwardService>();
+            builder.Services.AddScoped<EditionService>();
+            builder.Services.AddScoped<EducationService>();
+            builder.Services.AddScoped<GenreService>();
+            builder.Services.AddScoped<NationalityService>();
+            builder.Services.AddScoped<PublisherService>();
 
             var app = builder.Build();
 

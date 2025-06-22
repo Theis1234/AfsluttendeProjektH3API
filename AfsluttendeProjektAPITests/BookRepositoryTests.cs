@@ -21,8 +21,8 @@ namespace AfsluttendeProjektAPITests
             var author = new Author { Id = 1, FirstName = "Theis", LastName = "Coolman" };
             var books = new List<Book>
         {
-            new Book { Id = 1, Title = "Test Book 1", Genre = "Fiction", Author = author, AuthorId = author.Id, PublishedDate = new DateOnly(2020, 1, 1), NumberOfPages = 200, BasePrice = 10 },
-            new Book { Id = 2, Title = "Test Book 2", Genre = "Sci-Fi", Author = author, AuthorId = author.Id, PublishedDate = new DateOnly(2021, 1, 1), NumberOfPages = 300, BasePrice = 15 }
+            new Book { Id = 1, Title = "Test Book 1", Author = author, AuthorId = author.Id, PublishedDate = new DateOnly(2020, 1, 1), NumberOfPages = 200, BasePrice = 10 },
+            new Book { Id = 2, Title = "Test Book 2", Author = author, AuthorId = author.Id, PublishedDate = new DateOnly(2021, 1, 1), NumberOfPages = 300, BasePrice = 15 }
         };
 
             context.Authors.Add(author);
@@ -108,7 +108,6 @@ namespace AfsluttendeProjektAPITests
             var newBook = new Book
             {
                 Title = "Test Book 3",
-                Genre = "Fantasy",
                 AuthorId = 2,
                 Author = author,
                 PublishedDate = new DateOnly(2023, 1, 1),

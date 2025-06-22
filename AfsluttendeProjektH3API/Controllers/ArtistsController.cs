@@ -71,13 +71,27 @@ namespace AfsluttendeProjektH3API.Controllers
         // PUT: api/Artists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutArtist(int id, Artist artist)
+        public async Task<IActionResult> PutArtist(int id, ArtistDTO artistDTO)
         {
-            if (id != artist.Id)
+            var artist = await _service.GetAsync(id);
+
+            if (artist == null)
+                return NotFound();
+
+            artist.FirstName = artistDTO.FirstName;
+            artist.LastName = artistDTO.LastName;
+            artist.DateOfBirth = artistDTO.DateOfBirth;
+            artist.NationalityId = artistDTO.NationalityId;
+            artist.Address = artistDTO.Address;
+            artist.ContactInfo = artistDTO.ContactInfo;
+            artist.Awards = artistDTO.Awards?.Select(a => new Award
             {
-                return BadRequest();
-            }
+                Name = a.Name,
+                DateReceived = a.DateReceived,
+                Description = a.Description,
+
+            }).ToList();
+                artist.SocialLinks = artistDTO.SocialLinks;
 
             await _service.UpdateAsync(artist);
             return NoContent();
@@ -86,15 +100,25 @@ namespace AfsluttendeProjektH3API.Controllers
         // POST: api/Artists
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Artist>> PostArtist(CreateArtistDTO artistDTO)
+        public async Task<ActionResult<Artist>> PostArtist(ArtistDTO artistDTO)
         {
             var artist = new Artist
             {
                 FirstName = artistDTO.FirstName,
                 LastName = artistDTO.LastName,
-                Nationality = artistDTO.Nationality,
-                DateOfBirth = artistDTO.DateOfBirth
+                DateOfBirth = artistDTO.DateOfBirth,
+                NationalityId = artistDTO.NationalityId,
+                Address = artistDTO.Address,
+                ContactInfo = artistDTO.ContactInfo,
+                Awards = artistDTO.Awards?.Select(a => new Award
+                {
+                    Name = a.Name,
+                    DateReceived = a.DateReceived,
+                    Description = a.Description,
+                    
+                }).ToList(),
+                SocialLinks = artistDTO.SocialLinks
+                
             };
 
 
@@ -105,7 +129,6 @@ namespace AfsluttendeProjektH3API.Controllers
 
         // DELETE: api/Artists/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteArtist(int id)
         {
             await _service.DeleteAsync(id);

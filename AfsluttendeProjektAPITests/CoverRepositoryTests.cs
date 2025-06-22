@@ -27,7 +27,6 @@ namespace AfsluttendeProjektAPITests
             {
                 new Book { Id = 4,
                 Title = "Some Book",
-                Genre = "Fiction",
                 PublishedDate = new DateOnly(2000, 1, 1),
                 NumberOfPages = 123,
                 BasePrice = 9.99,
@@ -36,12 +35,10 @@ namespace AfsluttendeProjektAPITests
                     Id = 10,
                     FirstName = "Test Person 1",
                     LastName = "Author",
-                    DateOfBirth = new DateOnly(1980, 1, 1),
-                    Nationality = "Norwegian"
+                    DateOfBirth = new DateOnly(1980, 1, 1)                    
                 } },
                 new Book { Id = 1,
                 Title = "Some Book 2",
-                Genre = "Genecool",
                 PublishedDate = new DateOnly(1977, 1, 1),
                 NumberOfPages = 123,
                 BasePrice = 9.99,
@@ -50,12 +47,10 @@ namespace AfsluttendeProjektAPITests
                     Id = 5,
                     FirstName = "Test Person 2",
                     LastName = "Author",
-                    DateOfBirth = new DateOnly(1980, 1, 1),
-                    Nationality = "Orangutanland"
+                    DateOfBirth = new DateOnly(1980, 1, 1)
                 } },
                 new Book { Id = 3,
                 Title = "Some Boo 3k",
-                Genre = "Fantasy",
                 PublishedDate = new DateOnly(1976, 1, 1),
                 NumberOfPages = 123,
                 BasePrice = 9.99,
@@ -64,8 +59,7 @@ namespace AfsluttendeProjektAPITests
                     Id = 1,
                     FirstName = "Test Person 3",
                     LastName = "Author",
-                    DateOfBirth = new DateOnly(1980, 1, 1),
-                    Nationality = "Chinese"
+                    DateOfBirth = new DateOnly(1980, 1, 1)
                 } 
                 }
             };
@@ -171,7 +165,6 @@ namespace AfsluttendeProjektAPITests
             var newBook = new Book
             {
                 Title = "Test Book 3",
-                Genre = "Fantasy",
                 AuthorId = 2,
                 Author = author,
                 PublishedDate = new DateOnly(2023, 1, 1),

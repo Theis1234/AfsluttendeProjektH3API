@@ -10,8 +10,8 @@ namespace AfsluttendeProjektH3API.Application.Interfaces
 {
 	public interface IAuthService
 	{
-		Task<User?> RegisterUserAsync(UserDTO userDTO);
-		Task<TokenReponseDTO?> LoginAsync(UserDTO userDTO);
+		Task<User?> RegisterUserAsync(LoginUserDTO userDTO);
+		Task<TokenReponseDTO?> LoginAsync(LoginUserDTO userDTO);
         Task<TokenReponseDTO?> RefreshTokensAsync(RefreshTokenRequestDTO refreshTokenDTO);
     }
 }

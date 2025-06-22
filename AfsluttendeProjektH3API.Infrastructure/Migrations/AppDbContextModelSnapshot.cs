@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AfsluttendeProjektH3API.Migrations
+namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -41,11 +41,12 @@ namespace AfsluttendeProjektH3API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Nationality")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<int>("NationalityId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NationalityId");
 
                     b.ToTable("Artists");
                 });
@@ -62,7 +63,7 @@ namespace AfsluttendeProjektH3API.Migrations
 
                     b.HasIndex("CoverId");
 
-                    b.ToTable("ArtistCover");
+                    b.ToTable("ArtistCover", (string)null);
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Author", b =>
@@ -76,6 +77,9 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
 
+                    b.Property<int>("EducationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("FirstName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -87,16 +91,54 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.Property<string>("LastPublishedBook")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nationality")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<int>("NationalityId")
+                        .HasColumnType("int");
 
                     b.Property<int>("NumberOfBooksPublished")
                         .HasColumnType("int");
 
+                    b.Property<int>("PublisherId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("EducationId");
+
+                    b.HasIndex("NationalityId");
+
+                    b.HasIndex("PublisherId");
+
                     b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Award", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArtistId")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("DateReceived")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtistId");
+
+                    b.ToTable("Awards");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Book", b =>
@@ -113,9 +155,8 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.Property<double>("BasePrice")
                         .HasColumnType("float");
 
-                    b.Property<string>("Genre")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
 
                     b.Property<int>("NumberOfPages")
                         .HasColumnType("int");
@@ -130,6 +171,8 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("GenreId");
 
                     b.ToTable("Books");
                 });
@@ -158,6 +201,121 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("Covers");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Edition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Format")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<DateOnly>("ReleaseDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("Editions");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Education", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Degree")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<int>("GraduationYear")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Institution")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Educations");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genres");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Nationality", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CountryCode")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("CountryName")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Nationalities");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Publisher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ContactEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.User", b =>
@@ -194,6 +352,106 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Artist", b =>
+                {
+                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Nationality", "Nationality")
+                        .WithMany()
+                        .HasForeignKey("NationalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("AfsluttendeProjektH3API.Domain.Entities.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("ArtistId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("Country")
+                                .HasMaxLength(40)
+                                .HasColumnType("nvarchar(40)");
+
+                            b1.Property<string>("PostalCode")
+                                .HasMaxLength(20)
+                                .HasColumnType("nvarchar(20)");
+
+                            b1.Property<string>("State")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("Street")
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)");
+
+                            b1.HasKey("ArtistId");
+
+                            b1.ToTable("Artists");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ArtistId");
+                        });
+
+                    b.OwnsOne("AfsluttendeProjektH3API.Domain.Entities.ContactInfo", "ContactInfo", b1 =>
+                        {
+                            b1.Property<int>("ArtistId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Email")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
+
+                            b1.Property<string>("Phone")
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
+
+                            b1.Property<string>("Website")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
+
+                            b1.HasKey("ArtistId");
+
+                            b1.ToTable("Artists");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ArtistId");
+                        });
+
+                    b.OwnsOne("AfsluttendeProjektH3API.Domain.Entities.SocialLinks", "SocialLinks", b1 =>
+                        {
+                            b1.Property<int>("ArtistId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Instagram")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
+
+                            b1.Property<string>("Twitter")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
+
+                            b1.Property<string>("Website")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
+
+                            b1.HasKey("ArtistId");
+
+                            b1.ToTable("Artists");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ArtistId");
+                        });
+
+                    b.Navigation("Address");
+
+                    b.Navigation("ContactInfo");
+
+                    b.Navigation("Nationality");
+
+                    b.Navigation("SocialLinks");
+                });
+
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.ArtistCover", b =>
                 {
                     b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Artist", "Artist")
@@ -205,12 +463,135 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Cover", "Cover")
                         .WithMany("ArtistCovers")
                         .HasForeignKey("CoverId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Artist");
 
                     b.Navigation("Cover");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Author", b =>
+                {
+                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Education", "Education")
+                        .WithMany()
+                        .HasForeignKey("EducationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Nationality", "Nationality")
+                        .WithMany()
+                        .HasForeignKey("NationalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Publisher", "Publisher")
+                        .WithMany()
+                        .HasForeignKey("PublisherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("AfsluttendeProjektH3API.Domain.Entities.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("AuthorId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("Country")
+                                .HasMaxLength(40)
+                                .HasColumnType("nvarchar(40)");
+
+                            b1.Property<string>("PostalCode")
+                                .HasMaxLength(20)
+                                .HasColumnType("nvarchar(20)");
+
+                            b1.Property<string>("State")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("Street")
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)");
+
+                            b1.HasKey("AuthorId");
+
+                            b1.ToTable("Authors");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AuthorId");
+                        });
+
+                    b.OwnsOne("AfsluttendeProjektH3API.Domain.Entities.ContactInfo", "ContactInfo", b1 =>
+                        {
+                            b1.Property<int>("AuthorId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Email")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
+
+                            b1.Property<string>("Phone")
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
+
+                            b1.Property<string>("Website")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
+
+                            b1.HasKey("AuthorId");
+
+                            b1.ToTable("Authors");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AuthorId");
+                        });
+
+                    b.OwnsOne("AfsluttendeProjektH3API.Domain.Entities.Biography", "Biography", b1 =>
+                        {
+                            b1.Property<int>("AuthorId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("FullBio")
+                                .HasMaxLength(1000)
+                                .HasColumnType("nvarchar(1000)");
+
+                            b1.Property<string>("ShortBio")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
+
+                            b1.HasKey("AuthorId");
+
+                            b1.ToTable("Authors");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AuthorId");
+                        });
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Biography");
+
+                    b.Navigation("ContactInfo");
+
+                    b.Navigation("Education");
+
+                    b.Navigation("Nationality");
+
+                    b.Navigation("Publisher");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Award", b =>
+                {
+                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Artist", "Artist")
+                        .WithMany("Awards")
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Book", b =>
@@ -221,7 +602,15 @@ namespace AfsluttendeProjektH3API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Author");
+
+                    b.Navigation("Genre");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>
@@ -235,9 +624,65 @@ namespace AfsluttendeProjektH3API.Migrations
                     b.Navigation("Book");
                 });
 
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Edition", b =>
+                {
+                    b.HasOne("AfsluttendeProjektH3API.Domain.Entities.Book", "Book")
+                        .WithMany("Editions")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.User", b =>
+                {
+                    b.OwnsOne("AfsluttendeProjektH3API.Domain.Entities.UserProfile", "UserProfile", b1 =>
+                        {
+                            b1.Property<int>("UserId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Bio")
+                                .HasMaxLength(1000)
+                                .HasColumnType("nvarchar(1000)");
+
+                            b1.Property<DateTime?>("DateOfBirth")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("FirstName")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("LastName")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("PictureUrl")
+                                .HasMaxLength(500)
+                                .HasColumnType("nvarchar(500)");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("UserProfile")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Artist", b =>
                 {
                     b.Navigation("ArtistCovers");
+
+                    b.Navigation("Awards");
+                });
+
+            modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Book", b =>
+                {
+                    b.Navigation("Editions");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>

@@ -23,8 +23,8 @@ namespace AfsluttendeProjektH3API.Controllers
             _authService = authService;
 		}
 
-		[HttpPost("register")]
-		public async Task<ActionResult<User>> Register(UserDTO userDTO)
+        [HttpPost("register")]
+		public async Task<ActionResult<User>> Register(LoginUserDTO userDTO)
 		{
             if (!ModelState.IsValid)
             {
@@ -50,7 +50,7 @@ namespace AfsluttendeProjektH3API.Controllers
 		}
 
 		[HttpPost("login")]
-		public async Task<ActionResult<TokenReponseDTO>> Login(UserDTO userDTO)
+		public async Task<ActionResult<TokenReponseDTO>> Login(LoginUserDTO userDTO)
 		{
 			var response = await _authService.LoginAsync(userDTO);
 			if (response is null)

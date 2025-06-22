@@ -10,7 +10,7 @@ namespace AfsluttendeProjektH3API.Application.Interfaces
 {
 	public interface IUserRepository
 	{
-		Task<User?> AddAsync(UserDTO userDTO);
+		Task<User?> AddAsync(LoginUserDTO userDTO);
 		Task DeleteAsync(int id);
 		Task<IEnumerable<User>> GetAllAsync();
 		Task GenerateAndSaveRefreshTokenAsync(User user, string refreshToken);

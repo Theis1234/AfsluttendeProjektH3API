@@ -10,14 +10,14 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 		public ArtistRepository(AppDbContext context) => _context = context;
 
 		public async Task<Artist?> GetByIdAsync(int id) =>
-			await _context.Artists.FirstOrDefaultAsync(p => p.Id == id);
+			await _context.Artists.Include(a => a.ArtistCovers).FirstOrDefaultAsync(p => p.Id == id);
 
 		public async Task<IEnumerable<Artist>> GetAllAsync() =>
-			await _context.Artists.ToListAsync();
+			await _context.Artists.Include(a => a.ArtistCovers).ToListAsync();
 
         public async Task<IEnumerable<Artist>> GetFilteredAsync(string? firstName, string? lastName, string? nationality)
         {
-            var query = _context.Artists
+            var query = _context.Artists.Include(a => a.ArtistCovers)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(firstName))
@@ -27,13 +27,13 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
                 query = query.Where(b => b.LastName.ToLower().Contains(lastName.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(nationality))
-                query = query.Where(b => b.Nationality.ToLower().Contains(nationality.ToLower()));
+                query = query.Where(b => b.Nationality.CountryName.ToLower().Contains(nationality.ToLower()));
 
             return await query.ToListAsync();
         }
         public async Task<IEnumerable<Artist>> GetByArtistLastName(string? artistLastName)
         {
-            var query = _context.Artists               
+            var query = _context.Artists.Include(a => a.ArtistCovers)               
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(artistLastName))
@@ -43,7 +43,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
         }
         public async Task<IEnumerable<Artist>> GetByArtistFirstName(string? artistFirstName)
         {
-            var query = _context.Artists
+            var query = _context.Artists.Include(a => a.ArtistCovers)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(artistFirstName))
@@ -53,11 +53,15 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
         }
         public async Task<IEnumerable<Artist>> GetArtistsByNationality(string? nationality)
         {
-            var query = _context.Artists
+            var query = _context.Artists.Include(a => a.ArtistCovers)
+                .Include(a => a.Nationality) 
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(nationality))
-                query = query.Where(b => b.Nationality.ToLower() == nationality.ToLower());
+            {
+                query = query.Where(a => a.Nationality != null &&
+                                         a.Nationality.CountryName.ToLower() == nationality.ToLower());
+            }
 
             return await query.ToListAsync();
         }
@@ -83,16 +87,22 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 
             if (artist != null)
 			{
-                var orphanCovers = artist.ArtistCovers
-					.Where(ac => _context.ArtistCovers.Count(linkedAc => linkedAc.CoverId == ac.CoverId) == 1)
-					.Select(ac => ac.Cover)
-					.ToList();
-
-                _context.Covers.RemoveRange(orphanCovers);
+                var orphanCoverIds = artist.ArtistCovers
+                .Select(ac => ac.CoverId)
+                .Where(coverId =>
+                    _context.ArtistCovers.Count(ac => ac.CoverId == coverId) == 1)
+                .ToList();
 
                 _context.Artists.Remove(artist);
 				await _context.SaveChangesAsync();
-			}
+
+                var orphanCovers = await _context.Covers
+               .Where(c => orphanCoverIds.Contains(c.Id))
+               .ToListAsync();
+
+                _context.Covers.RemoveRange(orphanCovers);
+                await _context.SaveChangesAsync();
+            }
 		}
 		public bool ArtistExists(int id)
 		{

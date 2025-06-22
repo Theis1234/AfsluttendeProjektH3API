@@ -14,6 +14,7 @@ namespace AfsluttendeProjektH3API.Domain.Entities
 		public string Role { get; set; } = string.Empty;
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpirationTime { get; set; }
+        public UserProfile UserProfile { get; set; } = null!;
 
     }
 }

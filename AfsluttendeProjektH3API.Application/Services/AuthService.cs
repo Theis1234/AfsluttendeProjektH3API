@@ -24,7 +24,7 @@ namespace AfsluttendeProjektH3API.Application.Services
 			_userRepository = userRepository;
 			_config = config;
 		}
-		public async Task<TokenReponseDTO?> LoginAsync(UserDTO userDTO)
+		public async Task<TokenReponseDTO?> LoginAsync(LoginUserDTO userDTO)
         {
             var user = await _userRepository.GetByUsernameAsync(userDTO.Username);
             if (user is null)
@@ -37,6 +37,15 @@ namespace AfsluttendeProjektH3API.Application.Services
             }
             return await CreateTokenResponse(user);
         }
+        public async Task<LoginUserDTO?> GetUserByUsername(LoginUserDTO userDTO)
+        {
+            var user = await _userRepository.GetByUsernameAsync(userDTO.Username);
+            if (user is null)
+            {
+                return null;
+            }
+			return user;
+        }
 
         private async Task<TokenReponseDTO?> CreateTokenResponse(User user)
         {
@@ -47,7 +56,7 @@ namespace AfsluttendeProjektH3API.Application.Services
             };
         }
 
-        public async Task<User?> RegisterUserAsync(UserDTO userDTO)
+        public async Task<User?> RegisterUserAsync(LoginUserDTO userDTO)
 		{
 			var user = await _userRepository.AddAsync(userDTO);
 			return user;
