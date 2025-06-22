@@ -1,6 +1,8 @@
 ﻿using AfsluttendeProjektH3API.Application;
 using AfsluttendeProjektH3API.Application.DTOs;
+using AfsluttendeProjektH3API.Application.Interfaces;
 using AfsluttendeProjektH3API.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AfsluttendeProjektH3API;
@@ -9,9 +11,9 @@ namespace AfsluttendeProjektH3API;
 [ApiController]
 public class PublishersController : ControllerBase
 {
-    private readonly PublisherService _service;
+    private readonly IPublisherService _service;
 
-    public PublishersController(PublisherService service)
+    public PublishersController(IPublisherService service)
     {
         _service = service;
     }
@@ -41,6 +43,7 @@ public class PublishersController : ControllerBase
     // PUT: api/Publishers/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutPublisher(int id, UpdatePublisherDTO publisherDTO)
     {
         var publisher = await _service.GetAsync(id);
@@ -58,6 +61,7 @@ public class PublishersController : ControllerBase
     // POST: api/Publishers
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Publisher>> PostPublisher(CreatePublisherDTO publisherDTO)
     {
         var publisher = new Publisher
@@ -74,6 +78,7 @@ public class PublishersController : ControllerBase
 
     // DELETE: api/Publishers/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeletePublisher(int id)
     {
         await _service.DeleteAsync(id);

@@ -1,6 +1,8 @@
 ﻿using AfsluttendeProjektH3API.Application;
 using AfsluttendeProjektH3API.Application.DTOs;
+using AfsluttendeProjektH3API.Application.Interfaces;
 using AfsluttendeProjektH3API.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AfsluttendeProjektH3API;
@@ -9,9 +11,9 @@ namespace AfsluttendeProjektH3API;
 [ApiController]
 public class NationalitiesController : ControllerBase
 {
-    private readonly NationalityService _service;
+    private readonly INationalityService _service;
 
-    public NationalitiesController(NationalityService service)
+    public NationalitiesController(INationalityService service)
     {
         _service = service;
     }
@@ -41,6 +43,7 @@ public class NationalitiesController : ControllerBase
     // PUT: api/Nationalitys/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutNationality(int id, UpdateNationalityDTO nationalityDTO)
     {
         var nationality = await _service.GetAsync(id);
@@ -58,6 +61,7 @@ public class NationalitiesController : ControllerBase
     // POST: api/Nationalitys
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Nationality>> PostNationality(CreateNationalityDTO nationalityDTO)
     {
         var nationality = new Nationality
@@ -74,6 +78,7 @@ public class NationalitiesController : ControllerBase
 
     // DELETE: api/Nationalitys/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteNationality(int id)
     {
         await _service.DeleteAsync(id);

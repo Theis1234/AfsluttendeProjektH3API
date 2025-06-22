@@ -16,7 +16,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 			await _context.Users.FirstOrDefaultAsync(p => p.Id == id);
 
 		public async Task<User?> GetByUsernameAsync(string username) =>
-			await _context.Users.FirstOrDefaultAsync(p => p.Username == username);
+			await _context.Users.Include(u => u.UserProfile).FirstOrDefaultAsync(p => p.Username == username);
 
 		public async Task<IEnumerable<User>> GetAllAsync() =>
 			await _context.Users.ToListAsync();
@@ -28,7 +28,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 			await _context.SaveChangesAsync();
         }
 
-		public async Task<User?> AddAsync(LoginUserDTO userDTO)
+		public async Task<User?> AddAsync(UserDTO userDTO)
 		{
 			if (await _context.Users.AnyAsync(p => p.Username == userDTO.Username))
 			{

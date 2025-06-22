@@ -10,6 +10,7 @@ using AfsluttendeProjektH3API.Infrastructure;
 using AfsluttendeProjektH3API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using AfsluttendeProjektH3API.Application.DTOs;
+using AfsluttendeProjektH3API.Application.Interfaces;
 
 namespace AfsluttendeProjektH3API.Controllers
 {
@@ -17,9 +18,9 @@ namespace AfsluttendeProjektH3API.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-		private readonly AuthorService _service;
+		private readonly IAuthorService _service;
 
-		public AuthorsController(AuthorService service)
+		public AuthorsController(IAuthorService service)
 		{
 			_service = service;
 		}
@@ -71,6 +72,7 @@ namespace AfsluttendeProjektH3API.Controllers
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutAuthor(int id, AuthorDTO authorDTO)
         {
             var author = await _service.GetAsync(id);
@@ -97,6 +99,7 @@ namespace AfsluttendeProjektH3API.Controllers
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Author>> PostAuthor(AuthorDTO authorDTO)
         {
             var author = new Author
@@ -122,6 +125,7 @@ namespace AfsluttendeProjektH3API.Controllers
 
         // DELETE: api/Authors/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
 			await _service.DeleteAsync(id);

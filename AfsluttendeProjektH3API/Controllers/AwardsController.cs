@@ -1,5 +1,6 @@
 ﻿using AfsluttendeProjektH3API.Application;
 using AfsluttendeProjektH3API.Application.DTOs;
+using AfsluttendeProjektH3API.Application.Interfaces;
 using AfsluttendeProjektH3API.Application.Services;
 using AfsluttendeProjektH3API.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -11,9 +12,9 @@ namespace AfsluttendeProjektH3API;
 [ApiController]
 public class AwardsController : ControllerBase
 {
-    private readonly AwardService _service;
+    private readonly IAwardService _service;
 
-    public AwardsController(AwardService service)
+    public AwardsController(IAwardService service)
     {
         _service = service;
     }
@@ -43,6 +44,7 @@ public class AwardsController : ControllerBase
     // PUT: api/Awards/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutAward(int id, AwardDTO awardDTO)
     {
         var award = await _service.GetAsync(id);
@@ -62,6 +64,7 @@ public class AwardsController : ControllerBase
     // POST: api/Awards
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Award>> PostAward(AwardDTO awardDTO)
     {
         var award = new Award
@@ -80,6 +83,7 @@ public class AwardsController : ControllerBase
 
     // DELETE: api/Awards/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteAward(int id)
     {
         await _service.DeleteAsync(id);

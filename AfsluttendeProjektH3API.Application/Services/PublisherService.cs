@@ -3,7 +3,7 @@ using AfsluttendeProjektH3API.Domain.Entities;
 
 namespace AfsluttendeProjektH3API.Application;
 
-public class PublisherService
+public class PublisherService : IPublisherService
 {
     private readonly IGenericRepository<Publisher> _publisherRepository;
 

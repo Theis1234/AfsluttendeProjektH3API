@@ -11,6 +11,7 @@ using AfsluttendeProjektH3API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using AfsluttendeProjektH3API.Application.DTOs;
 using Humanizer;
+using AfsluttendeProjektH3API.Application.Interfaces;
 
 namespace AfsluttendeProjektH3API.Controllers
 {
@@ -18,9 +19,9 @@ namespace AfsluttendeProjektH3API.Controllers
     [ApiController]
     public class CoversController : ControllerBase
     {
-		private readonly CoverService _service;
+		private readonly ICoverService _service;
 
-		public CoversController(CoverService service)
+		public CoversController(ICoverService service)
 		{
 			_service = service;
 		}

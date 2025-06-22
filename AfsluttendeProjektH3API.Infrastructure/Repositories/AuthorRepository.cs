@@ -56,7 +56,6 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
         public async Task DeleteAsync(int id)
         {
             var author = await _context.Authors
-            .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
 
             if (author is null) return;
@@ -108,7 +107,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 
         public async Task<IEnumerable<Author>> GetByAuthorsFirstName(string? authorFirstName)
         {
-            var query = _context.Authors
+            var query = _context.Authors.AsNoTracking()
                 .Include(a => a.Nationality)
                 .Include(a => a.Publisher)
                 .Include(a => a.Education)

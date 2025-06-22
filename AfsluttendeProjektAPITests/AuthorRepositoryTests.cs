@@ -23,29 +23,38 @@ namespace AfsluttendeProjektAPITests
 
         private async Task SeedAsync(AppDbContext context)
         {
+            var publisher = new Publisher { Id = 1, Name = "doesntmatter" };
+            var nationality = new Nationality { Id = 1, CountryName = "coolland" };
+            var education = new Education { Id = 1, Degree = "very cool education" };
+
+
             var authors = new List<Author>
         {
-            new Author { Id = 1, FirstName = "Test Person 1", LastName = "John", LastPublishedBook = "Last Publish Test", DateOfBirth = new DateOnly(1970, 1, 1), NumberOfBooksPublished = 200 },
-            new Author { Id = 2, FirstName = "Test Person 2", LastName = "Egon",  LastPublishedBook = "Last Publish Test 2", DateOfBirth = new DateOnly(1972, 1, 1), NumberOfBooksPublished = 300}
+            new Author { Id = 1, FirstName = "Test Person 1", LastName = "John", LastPublishedBook = "Last Publish Test", DateOfBirth = new DateOnly(1970, 1, 1), NumberOfBooksPublished = 200, Publisher = publisher, Nationality = nationality, Education = education },
+            new Author { Id = 2, FirstName = "Test Person 2", LastName = "Coolman",  LastPublishedBook = "Last Publish Test 2", DateOfBirth = new DateOnly(1972, 1, 1), NumberOfBooksPublished = 300, Publisher = publisher, Nationality = nationality, Education = education},
+            new Author { Id = 3, FirstName = "Test Person 4", LastName = "Terry", LastPublishedBook = "Last 4322", DateOfBirth = new DateOnly(1970, 1, 1), NumberOfBooksPublished = 200, Publisher = publisher, Nationality = nationality, Education = education },
+            new Author { Id = 5, FirstName = "Test Person 6", LastName = "Berry",  LastPublishedBook = "Last142", DateOfBirth = new DateOnly(1972, 1, 1), NumberOfBooksPublished = 300, Publisher = publisher, Nationality = nationality, Education = education}
         };
 
             context.Authors.AddRange(authors);
             await context.SaveChangesAsync();
         }
 
-        [Fact]
-        public async Task GetByIdAsync_ReturnsAuthor_WhenIdExists()
+        [Theory]
+        [InlineData(1, "Test Person 1")]
+        [InlineData(5, "Test Person 6")] // Optional: Add only if these exist in SeedAsync
+        public async Task GetByIdAsync_ReturnsAuthor_WhenIdExists(int authorId, string expectedFirstName)
         {
-            var dbName = nameof(GetByIdAsync_ReturnsAuthor_WhenIdExists);
+            var dbName = nameof(GetByIdAsync_ReturnsAuthor_WhenIdExists) + authorId;
             var context = GetDbContext(dbName);
             await SeedAsync(context);
 
             var repo = new AuthorRepository(context);
 
-            var author = await repo.GetByIdAsync(1);
+            var author = await repo.GetByIdAsync(authorId);
 
             Assert.NotNull(author);
-            Assert.Equal("Test Person 1", author.FirstName);
+            Assert.Equal(expectedFirstName, author.FirstName);
         }
 
         [Fact]
@@ -69,32 +78,39 @@ namespace AfsluttendeProjektAPITests
 
             var authors = await repo.GetAllAsync();
 
-            Assert.Equal(2, authors.Count());
+            Assert.Equal(4, authors.Count());
         }
 
-        [Fact]
-        public async Task GetByLastName_FiltersCorrectly()
+        [Theory]
+        [InlineData("John", 1)]
+        [InlineData("Doe", 0)] // Example additional case
+        [InlineData("Coolman", 1)] // Another possible match if present in seed data
+        public async Task GetByLastName_FiltersCorrectly(string lastName, int expectedCount)
         {
-            var context = GetDbContext(nameof(GetByLastName_FiltersCorrectly));
+            var context = GetDbContext(nameof(GetByLastName_FiltersCorrectly) + lastName);
             await SeedAsync(context);
             var repo = new AuthorRepository(context);
 
-            var artists = await repo.GetByAuthorsLastName("John");
+            var authors = await repo.GetByAuthorsLastName(lastName);
 
-            Assert.Equal(1, artists.Count());
+            Assert.Equal(expectedCount, authors.Count());
         }
 
-        [Fact]
-        public async Task GetByFirstName_FiltersCorrectly()
+        [Theory]
+        [InlineData("Test Person 2", 1)]
+        [InlineData("Test Person 1", 1)]
+        [InlineData("john", 0)]
+        public async Task GetByFirstName_FiltersCorrectly(string firstName, int expectedCount)
         {
-            var context = GetDbContext(nameof(GetByFirstName_FiltersCorrectly));
+            var context = GetDbContext(nameof(GetByFirstName_FiltersCorrectly) + firstName);
             await SeedAsync(context);
             var repo = new AuthorRepository(context);
 
-            var artists = await repo.GetByAuthorsFirstName("Test Person 2");
+            var authors = await repo.GetByAuthorsFirstName(firstName);
 
-            Assert.Equal(1, artists.Count());
+            Assert.Equal(expectedCount, authors.Count());
         }
+
 
         [Fact]
         public async Task AddAsync_AddsAuthorSuccessfully()
@@ -107,7 +123,7 @@ namespace AfsluttendeProjektAPITests
             context.Authors.Add(author);
             await context.SaveChangesAsync();
 
-            Assert.Equal(3, context.Authors.Count());
+            Assert.Equal(5, context.Authors.Count());
         }
 
         [Fact]
@@ -121,6 +137,23 @@ namespace AfsluttendeProjektAPITests
 
             var author = await context.Authors.FindAsync(1);
             Assert.Null(author);
+        }
+        [Theory]
+        [InlineData("Test Person 1", "John", "coolland", 1)]
+        [InlineData("Test", null, null, 4)]
+        [InlineData(null, "Coolman", null, 1)]
+        [InlineData(null, null, "coolland", 4)]
+        [InlineData("Nonexistent", "Nobody", "Nowhere", 0)] 
+        public async Task GetFilteredAsync_FiltersByMultipleFieldsCorrectly(
+    string? firstName, string? lastName, string? nationality, int expectedCount)
+        {
+            var context = GetDbContext(nameof(GetFilteredAsync_FiltersByMultipleFieldsCorrectly) + firstName + lastName + nationality);
+            await SeedAsync(context);
+            var repo = new AuthorRepository(context);
+
+            var authors = await repo.GetFilteredAsync(firstName, lastName, nationality);
+
+            Assert.Equal(expectedCount, authors.Count());
         }
 
         [Fact]

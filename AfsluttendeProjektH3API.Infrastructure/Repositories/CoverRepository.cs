@@ -49,13 +49,14 @@ namespace AfsluttendeProjektH3API.Infrastructure.Repositories
 
 		public async Task DeleteAsync(int id)
 		{
-			var entity = await _context.Covers.FindAsync(id);
-			if (entity != null)
-			{
-				_context.Covers.Remove(entity);
-				await _context.SaveChangesAsync();
-			}
-		}
+            var artistCovers = _context.ArtistCovers.Where(ac => ac.CoverId == id);
+            _context.ArtistCovers.RemoveRange(artistCovers);
+
+            var cover = await _context.Covers.FindAsync(id);
+            _context.Covers.Remove(cover);
+
+            await _context.SaveChangesAsync();
+        }
 		public bool CoverExists(int id)
 		{
 			return _context.Covers.Any(c => c.Id == id);

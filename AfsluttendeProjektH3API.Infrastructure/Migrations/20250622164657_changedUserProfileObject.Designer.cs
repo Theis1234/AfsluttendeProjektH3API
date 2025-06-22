@@ -4,6 +4,7 @@ using AfsluttendeProjektH3API.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250622164657_changedUserProfileObject")]
+    partial class changedUserProfileObject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasIndex("NationalityId");
 
-                    b.ToTable("Artists", (string)null);
+                    b.ToTable("Artists");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.ArtistCover", b =>
@@ -108,7 +111,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasIndex("PublisherId");
 
-                    b.ToTable("Authors", (string)null);
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Award", b =>
@@ -138,7 +141,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasIndex("ArtistId");
 
-                    b.ToTable("Awards", (string)null);
+                    b.ToTable("Awards");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Book", b =>
@@ -174,7 +177,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Cover", b =>
@@ -200,7 +203,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("Covers", (string)null);
+                    b.ToTable("Covers");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Edition", b =>
@@ -226,7 +229,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("Editions", (string)null);
+                    b.ToTable("Editions");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Education", b =>
@@ -252,7 +255,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Educations", (string)null);
+                    b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Genre", b =>
@@ -270,7 +273,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Nationality", b =>
@@ -293,7 +296,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Nationalities", (string)null);
+                    b.ToTable("Nationalities");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Publisher", b =>
@@ -315,7 +318,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Publishers", (string)null);
+                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.User", b =>
@@ -349,7 +352,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("AfsluttendeProjektH3API.Domain.Entities.Artist", b =>
@@ -387,7 +390,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                             b1.HasKey("ArtistId");
 
-                            b1.ToTable("Artists", (string)null);
+                            b1.ToTable("Artists");
 
                             b1.WithOwner()
                                 .HasForeignKey("ArtistId");
@@ -412,7 +415,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                             b1.HasKey("ArtistId");
 
-                            b1.ToTable("Artists", (string)null);
+                            b1.ToTable("Artists");
 
                             b1.WithOwner()
                                 .HasForeignKey("ArtistId");
@@ -437,7 +440,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                             b1.HasKey("ArtistId");
 
-                            b1.ToTable("Artists", (string)null);
+                            b1.ToTable("Artists");
 
                             b1.WithOwner()
                                 .HasForeignKey("ArtistId");
@@ -518,28 +521,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                             b1.HasKey("AuthorId");
 
-                            b1.ToTable("Authors", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("AuthorId");
-                        });
-
-                    b.OwnsOne("AfsluttendeProjektH3API.Domain.Entities.Biography", "Biography", b1 =>
-                        {
-                            b1.Property<int>("AuthorId")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("FullBio")
-                                .HasMaxLength(1000)
-                                .HasColumnType("nvarchar(1000)");
-
-                            b1.Property<string>("ShortBio")
-                                .HasMaxLength(256)
-                                .HasColumnType("nvarchar(256)");
-
-                            b1.HasKey("AuthorId");
-
-                            b1.ToTable("Authors", (string)null);
+                            b1.ToTable("Authors");
 
                             b1.WithOwner()
                                 .HasForeignKey("AuthorId");
@@ -564,7 +546,28 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                             b1.HasKey("AuthorId");
 
-                            b1.ToTable("Authors", (string)null);
+                            b1.ToTable("Authors");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AuthorId");
+                        });
+
+                    b.OwnsOne("AfsluttendeProjektH3API.Domain.Entities.Biography", "Biography", b1 =>
+                        {
+                            b1.Property<int>("AuthorId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("FullBio")
+                                .HasMaxLength(1000)
+                                .HasColumnType("nvarchar(1000)");
+
+                            b1.Property<string>("ShortBio")
+                                .HasMaxLength(256)
+                                .HasColumnType("nvarchar(256)");
+
+                            b1.HasKey("AuthorId");
+
+                            b1.ToTable("Authors");
 
                             b1.WithOwner()
                                 .HasForeignKey("AuthorId");
@@ -663,7 +666,7 @@ namespace AfsluttendeProjektH3API.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users", (string)null);
+                            b1.ToTable("Users");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");

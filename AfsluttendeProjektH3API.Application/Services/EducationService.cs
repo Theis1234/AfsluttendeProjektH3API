@@ -3,7 +3,7 @@ using AfsluttendeProjektH3API.Domain.Entities;
 
 namespace AfsluttendeProjektH3API.Application;
 
-public class EducationService
+public class EducationService : IEducationService
 {
     private readonly IGenericRepository<Education> _educationRepository;
 

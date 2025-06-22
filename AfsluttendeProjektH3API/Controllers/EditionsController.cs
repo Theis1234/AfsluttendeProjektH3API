@@ -1,5 +1,7 @@
 ﻿using AfsluttendeProjektH3API.Application;
+using AfsluttendeProjektH3API.Application.Interfaces;
 using AfsluttendeProjektH3API.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +11,9 @@ namespace AfsluttendeProjektH3API;
 [ApiController]
 public class EditionsController : ControllerBase
 {
-    private readonly EditionService _service;
+    private readonly IEditionService _service;
 
-    public EditionsController(EditionService service)
+    public EditionsController(IEditionService service)
     {
         _service = service;
     }
@@ -41,6 +43,7 @@ public class EditionsController : ControllerBase
     // PUT: api/Editions/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutEdition(int id, EditionDTO editionDTO)
     {
         var edition = await _service.GetAsync(id);
@@ -59,6 +62,7 @@ public class EditionsController : ControllerBase
     // POST: api/Editions
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Edition>> PostEdition(EditionDTO editionDTO)
     {
         var edition = new Edition
@@ -76,6 +80,7 @@ public class EditionsController : ControllerBase
 
     // DELETE: api/Editions/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteEdition(int id)
     {
         await _service.DeleteAsync(id);

@@ -3,7 +3,7 @@ using AfsluttendeProjektH3API.Domain.Entities;
 
 namespace AfsluttendeProjektH3API.Application;
 
-public class NationalityService
+public class NationalityService : INationalityService
 {
     private readonly IGenericRepository<Nationality> _nationalityRepository;
 

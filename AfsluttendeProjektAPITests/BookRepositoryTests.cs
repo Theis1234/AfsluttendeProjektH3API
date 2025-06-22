@@ -19,14 +19,24 @@ namespace AfsluttendeProjektAPITests
         private async Task SeedAsync(AppDbContext context)
         {
             var author = new Author { Id = 1, FirstName = "Theis", LastName = "Coolman" };
+            var genre = new Genre { Id = 1, Name = "Fiction" };
+            var editions = new List<Edition>
+            {
+                 new Edition { Id = 1, BookId = 1},
+                 new Edition { Id = 2, BookId = 2 }
+            };
+
+
             var books = new List<Book>
         {
-            new Book { Id = 1, Title = "Test Book 1", Author = author, AuthorId = author.Id, PublishedDate = new DateOnly(2020, 1, 1), NumberOfPages = 200, BasePrice = 10 },
-            new Book { Id = 2, Title = "Test Book 2", Author = author, AuthorId = author.Id, PublishedDate = new DateOnly(2021, 1, 1), NumberOfPages = 300, BasePrice = 15 }
+            new Book { Id = 1, Title = "Test Book 1", Author = author, AuthorId = author.Id, PublishedDate = new DateOnly(2020, 1, 1), NumberOfPages = 200, BasePrice = 10, Editions = editions, Genre = genre },
+            new Book { Id = 2, Title = "Test Book 2", Author = author, AuthorId = author.Id, PublishedDate = new DateOnly(2021, 1, 1), NumberOfPages = 300, BasePrice = 15, Editions = editions, Genre = genre }
         };
 
             context.Authors.Add(author);
             context.Books.AddRange(books);
+            context.Genres.Add(genre);
+            context.Editions.AddRange(editions);
             await context.SaveChangesAsync();
         }
 

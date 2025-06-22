@@ -3,7 +3,7 @@ using AfsluttendeProjektH3API.Domain.Entities;
 
 namespace AfsluttendeProjektH3API.Application;
 
-public class GenreService
+public class GenreService : IGenreService
 {
     private readonly IGenericRepository<Genre> _genreRepository;
 

@@ -25,8 +25,13 @@ namespace AfsluttendeProjektAPITests
         {
             var artists = new List<Artist>
         {
-            new Artist { Id = 1, FirstName = "Test Person Banana", LastName = "Simons", DateOfBirth = new DateOnly(1973, 1, 1) },
-            new Artist { Id = 2, FirstName = "Test Person 2", LastName = "Styles", DateOfBirth = new DateOnly(1972, 1, 1) }
+            new Artist { Id = 1, FirstName = "Test Person Banana", LastName = "Aeety", Nationality = new Nationality{ CountryName = "Potato", Id = 1}, DateOfBirth = new DateOnly(1973, 1, 1) },
+            new Artist { Id = 2, FirstName = "John Adams", LastName = "Etee", Nationality = new Nationality{ CountryName = "Betete", Id = 2}, DateOfBirth = new DateOnly(1973, 1, 1) },
+            new Artist { Id = 3, FirstName = "Eva Williams", LastName = "Garry", Nationality = new Nationality{ CountryName = "rampland", Id = 3}, DateOfBirth = new DateOnly(1973, 1, 1) },
+            new Artist { Id = 4, FirstName = "George Davis", LastName = "Bad", Nationality = new Nationality{ CountryName = "Iceland", Id = 4},DateOfBirth = new DateOnly(1973, 1, 1) },
+            new Artist { Id = 5, FirstName = "Ronal", LastName = "Dinho", Nationality = new Nationality{ CountryName = "Greenland", Id = 5}, DateOfBirth = new DateOnly(1973, 1, 1) },
+            new Artist { Id = 6, FirstName = "Theis", LastName = "Gravgaard", Nationality = new Nationality{ CountryName = "USA", Id = 6}, DateOfBirth = new DateOnly(1973, 1, 1) },
+            new Artist { Id = 7, FirstName = "Tee", LastName = "Meeeed", Nationality = new Nationality{ CountryName = "England", Id = 7}, DateOfBirth = new DateOnly(1972, 1, 1) }
         };
 
             context.Artists.AddRange(artists);
@@ -48,16 +53,20 @@ namespace AfsluttendeProjektAPITests
             Assert.Equal("Test Person Banana", artist.FirstName);
         }
 
-        [Fact]
-        public async Task GetByNationalityAsync_ReturnsEmptyArray_WhenNationalityDoesNotExist()
+        [Theory]
+        [InlineData("Nonexistent")]
+        [InlineData("Unknown")]
+        [InlineData("Narnia")]
+        [InlineData("MiddleEarth")]
+        public async Task GetByNationalityAsync_ReturnsEmptyArray_WhenNationalityDoesNotExist(string nationality)
         {
-            var context = GetDbContext(nameof(GetByNationalityAsync_ReturnsEmptyArray_WhenNationalityDoesNotExist));
+            var context = GetDbContext(nameof(GetByNationalityAsync_ReturnsEmptyArray_WhenNationalityDoesNotExist) + nationality);
             await SeedAsync(context);
             var repo = new ArtistRepository(context);
 
-            var result = await repo.GetArtistsByNationality("Nonexistent");
+            var result = await repo.GetArtistsByNationality(nationality);
 
-            Assert.Equal([], result);
+            Assert.Empty(result);
         }
 
         [Fact]
@@ -69,52 +78,70 @@ namespace AfsluttendeProjektAPITests
 
             var artists = await repo.GetAllAsync();
 
-            Assert.Equal(2, artists.Count());
+            Assert.Equal(7, artists.Count());
         }
 
-        [Fact]
-        public async Task GetByLastName_FiltersCorrectly()
+        [Theory]
+        [InlineData("Aeety", 1)]
+        [InlineData("Dinho", 1)]
+        [InlineData("Nonexistent", 0)]
+        public async Task GetByLastName_FiltersCorrectly(string lastName, int expectedCount)
         {
-            var context = GetDbContext(nameof(GetByLastName_FiltersCorrectly));
+            var context = GetDbContext(nameof(GetByLastName_FiltersCorrectly) + lastName);
             await SeedAsync(context);
             var repo = new ArtistRepository(context);
 
-            var artists = await repo.GetByArtistLastName("Styles");
+            var artists = await repo.GetByArtistLastName(lastName);
 
-            Assert.Equal(1, artists.Count());
+            Assert.Equal(expectedCount, artists.Count());
         }
-        [Fact]
-        public async Task GetFilteredAsync_FiltersCorrectlyWhenNationalityIsNull()
+
+
+        [Theory]
+        [InlineData("Eva Williams", "Garry", 1)]
+        [InlineData("John", "etee", 1)]
+        [InlineData("Nonexistent", "lastname", 0)]
+        [InlineData("George", "bad", 1)]
+        public async Task GetFilteredAsync_FiltersCorrectlyWhenNationalityIsNull(string firstName, string lastName, int expectedCount)
         {
-            var context = GetDbContext(nameof(GetFilteredAsync_FiltersCorrectlyWhenNationalityIsNull));
+            var context = GetDbContext(nameof(GetFilteredAsync_FiltersCorrectlyWhenNationalityIsNull) + firstName + lastName);
             await SeedAsync(context);
             var repo = new ArtistRepository(context);
 
-            var artists = await repo.GetFilteredAsync("Test person banana", "simons", null);
+            var artists = await repo.GetFilteredAsync(firstName, lastName, null);
 
-            Assert.Equal(1, artists.Count());
+            Assert.Equal(expectedCount, artists.Count());
         }
-        [Fact]
-        public async Task GetFilteredAsync_FiltersCorrectlyWhenLastNameIsNull()
+        [Theory]
+        [InlineData("Ronal", "Greenland", 1)]
+        [InlineData("John Adams", "Betete", 1)]
+        [InlineData("Nonexistent", "nowhere", 0)]
+        [InlineData("Tee", "England", 1)]
+        public async Task GetFilteredAsync_FiltersCorrectlyWhenLastNameIsNull(string firstName, string nationality, int expectedCount)
         {
-            var context = GetDbContext(nameof(GetFilteredAsync_FiltersCorrectlyWhenLastNameIsNull));
+            var context = GetDbContext(nameof(GetFilteredAsync_FiltersCorrectlyWhenLastNameIsNull) + firstName + nationality);
             await SeedAsync(context);
             var repo = new ArtistRepository(context);
 
-            var artists = await repo.GetFilteredAsync("Test person banana", null, "greenlandic");
+            var artists = await repo.GetFilteredAsync(firstName, null, nationality);
 
-            Assert.Equal(1, artists.Count());
+            Assert.Equal(expectedCount, artists.Count());
         }
-        [Fact]
-        public async Task GetByFirstName_FiltersCorrectly()
+        [Theory]
+        [InlineData("Test Person Banana", 1)]
+        [InlineData("Banana", 0)]         
+        [InlineData("John Adams", 1)]        
+        [InlineData("Eva Williams", 1)]       
+        [InlineData("Nonexistent", 0)]
+        public async Task GetByFirstName_FiltersCorrectly(string firstName, int expectedCount)
         {
-            var context = GetDbContext(nameof(GetByFirstName_FiltersCorrectly));
+            var context = GetDbContext(nameof(GetByFirstName_FiltersCorrectly) + firstName);
             await SeedAsync(context);
             var repo = new ArtistRepository(context);
 
-            var artists = await repo.GetByArtistFirstName("Test Person banana");
+            var artists = await repo.GetByArtistFirstName(firstName);
 
-            Assert.Equal(1, artists.Count());
+            Assert.Equal(expectedCount, artists.Count());
         }
 
         [Fact]
@@ -128,7 +155,7 @@ namespace AfsluttendeProjektAPITests
             context.Artists.Add(artist);
             await context.SaveChangesAsync();
 
-            Assert.Equal(3, context.Artists.Count());
+            Assert.Equal(8, context.Artists.Count());
         }
 
         [Fact]
@@ -144,16 +171,23 @@ namespace AfsluttendeProjektAPITests
             Assert.Null(artist);
         }
 
-        [Fact]
-        public void AuthorExists_ReturnsTrue_WhenArtistExists()
+        [Theory]
+        [InlineData(1, true)]
+        [InlineData(4, true)]
+        [InlineData(7, true)]
+        [InlineData(4444, false)]
+        [InlineData(54, false)]
+        public async Task ArtistExists_ReturnsCorrectResult(int artistId, bool expectedResult)
         {
-            var context = GetDbContext(nameof(AuthorExists_ReturnsTrue_WhenArtistExists));
-            context.Artists.Add(new Artist { Id = 42, FirstName = "Hans", LastName = "Egonsen", DateOfBirth = new DateOnly(1972, 1, 1) });
+            var context = GetDbContext(nameof(ArtistExists_ReturnsCorrectResult) + artistId);
+            await SeedAsync(context);
             context.SaveChanges();
 
             var repo = new ArtistRepository(context);
 
-            Assert.True(repo.ArtistExists(42));
+            var result = repo.ArtistExists(artistId);
+
+            Assert.Equal(expectedResult, result);
         }
     }
 }

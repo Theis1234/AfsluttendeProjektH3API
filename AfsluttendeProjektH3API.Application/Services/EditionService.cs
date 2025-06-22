@@ -3,7 +3,7 @@ using AfsluttendeProjektH3API.Domain.Entities;
 
 namespace AfsluttendeProjektH3API.Application;
 
-public class EditionService
+public class EditionService : IEditionService
 {
     private readonly IGenericRepository<Edition> _editionRepository;
 

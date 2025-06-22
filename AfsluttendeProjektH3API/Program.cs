@@ -69,16 +69,16 @@ namespace AfsluttendeProjektH3API
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<AuthorService>();
-            builder.Services.AddScoped<ArtistService>();
-            builder.Services.AddScoped<BookService>();
-            builder.Services.AddScoped<CoverService>();
-            builder.Services.AddScoped<AwardService>();
-            builder.Services.AddScoped<EditionService>();
-            builder.Services.AddScoped<EducationService>();
-            builder.Services.AddScoped<GenreService>();
-            builder.Services.AddScoped<NationalityService>();
-            builder.Services.AddScoped<PublisherService>();
+            builder.Services.AddScoped<IAuthorService, AuthorService>();
+            builder.Services.AddScoped<IArtistService, ArtistService>();
+            builder.Services.AddScoped<IBookService, BookService>();
+            builder.Services.AddScoped<ICoverService, CoverService>();
+            builder.Services.AddScoped<IAwardService, AwardService>();
+            builder.Services.AddScoped<IEditionService, EditionService>();
+            builder.Services.AddScoped<IEducationService, EducationService>();
+            builder.Services.AddScoped<IGenreService, GenreService>();
+            builder.Services.AddScoped<INationalityService, NationalityService>();
+            builder.Services.AddScoped<IPublisherService, PublisherService>();
 
             var app = builder.Build();
 

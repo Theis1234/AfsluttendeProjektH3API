@@ -1,6 +1,8 @@
 ﻿using AfsluttendeProjektH3API.Application;
 using AfsluttendeProjektH3API.Application.DTOs;
+using AfsluttendeProjektH3API.Application.Interfaces;
 using AfsluttendeProjektH3API.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AfsluttendeProjektH3API;
@@ -9,9 +11,9 @@ namespace AfsluttendeProjektH3API;
 [ApiController]
 public class GenresController : ControllerBase
 {
-    private readonly GenreService _service;
+    private readonly IGenreService _service;
 
-    public GenresController(GenreService service)
+    public GenresController(IGenreService service)
     {
         _service = service;
     }
@@ -41,6 +43,7 @@ public class GenresController : ControllerBase
     // PUT: api/Genres/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutGenre(int id, UpdateGenreDTO genreDTO)
     {
         var genre = await _service.GetAsync(id);
@@ -57,6 +60,7 @@ public class GenresController : ControllerBase
     // POST: api/Genres
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Genre>> PostGenre(CreateGenreDTO genreDTO)
     {
         var genre = new Genre
@@ -72,6 +76,7 @@ public class GenresController : ControllerBase
 
     // DELETE: api/Genres/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteGenre(int id)
     {
         await _service.DeleteAsync(id);

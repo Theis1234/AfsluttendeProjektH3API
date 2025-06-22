@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AfsluttendeProjektH3API.Application.DTOs
 {
-	public class LoginUserDTO
+	public class UserDTO
 	{
         [Required]
         [MinLength(5, ErrorMessage = "Username must be at least 5 characters long.")]

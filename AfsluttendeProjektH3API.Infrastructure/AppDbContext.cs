@@ -48,7 +48,7 @@ namespace AfsluttendeProjektH3API.Infrastructure
 			.HasOne(ba => ba.Artist)
 			.WithMany(b => b.ArtistCovers)
 			.HasForeignKey(ba => ba.ArtistId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<ArtistCover>()
 				.HasOne(ba => ba.Cover)
@@ -152,7 +152,6 @@ namespace AfsluttendeProjektH3API.Infrastructure
             modelBuilder.Entity<User>(u =>
             {
                 u.HasKey(e => e.Id);
-                u.OwnsOne(u => u.UserProfile);
             });
 
             modelBuilder.Entity<User>(u =>

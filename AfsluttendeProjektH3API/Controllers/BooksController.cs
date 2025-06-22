@@ -11,6 +11,7 @@ using AfsluttendeProjektH3API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using AfsluttendeProjektH3API.Application.DTOs;
 using Humanizer;
+using AfsluttendeProjektH3API.Application.Interfaces;
 
 namespace AfsluttendeProjektH3API.Controllers
 {
@@ -18,10 +19,10 @@ namespace AfsluttendeProjektH3API.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-		private readonly BookService _bookService;
-        private readonly AuthorService _authorService;
+		private readonly IBookService _bookService;
+        private readonly IAuthorService _authorService;
 
-        public BooksController(BookService service, AuthorService authorService)
+        public BooksController(IBookService service, IAuthorService authorService)
         {
             _bookService = service;
             _authorService = authorService;
@@ -59,6 +60,7 @@ namespace AfsluttendeProjektH3API.Controllers
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutBook(int id, BookDTO bookDTO)
         {
 			var book = await _bookService.GetAsync(id);
@@ -80,6 +82,7 @@ namespace AfsluttendeProjektH3API.Controllers
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Book>> PostBook(BookDTO bookDTO)
         {
                 var author = await _authorService.GetAsync(bookDTO.AuthorId);
@@ -105,6 +108,7 @@ namespace AfsluttendeProjektH3API.Controllers
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteBook(int id)
         {
 			await _bookService.DeleteAsync(id);
